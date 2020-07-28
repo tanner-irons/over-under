@@ -1,0 +1,25 @@
+const csv = require('csv-parser');
+const fs = require('fs');
+const { performance } = require('perf_hooks');
+
+const questions = new Map();
+fs.createReadStream('./csv/example.csv')
+    .pipe(csv())
+    .on('data', (row) => {
+        Object.entries(row)
+            .filter(([question, response]) => response && question !== 'Timestamp')
+            .forEach(([question, response]) => {
+                const responses = questions.get(question);
+                questions.set(question, [...(responses || []), response === 'Yes']);
+            });
+    })
+    .on('end', () => {
+        const responses = Array.from(questions).map(([question, responses]) => {
+            const yes = Math.round((responses.filter(response => !!response).length / responses.length) * 100);
+            const no = 100 - yes;
+            return { question, count: responses.length, yes, no };
+        });
+        const writer = fs.createWriteStream('../src/data/responses.json')
+        writer.write(JSON.stringify(responses));
+        writer.end();
+    });
