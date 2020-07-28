@@ -1,4 +1,4 @@
-import { ResponseActions } from "../actions/ResponseActions";
+import { ResponseActions } from "./ResponseActions";
 
 const initialState = {
     responses: [],
@@ -14,12 +14,12 @@ export default (state = initialState, action) => {
             state.activeIndex = action.payload;
             return state;
         case ResponseActions.IncrementActiveIndex:
-            if (state.activeIndex < state.responses.length) {
+            if (state.activeIndex + 1 < state.responses.length) {
                 state.activeIndex++;
             }
             return state;
         case ResponseActions.DecrementActiveIndex:
-            if (state.activeIndex >= 0) {
+            if (state.activeIndex - 1 >= 0) {
                 state.activeIndex--;
             }
             return state;

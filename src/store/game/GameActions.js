@@ -1,6 +1,6 @@
-export const updateTargetGuess = (guess) => {
+export const setTargetGuess = (guess) => {
     return {
-        type: GameActions.UpdateTargetGuess,
+        type: GameActions.SetTargetGuess,
         payload: guess
     }
 }
@@ -19,8 +19,16 @@ export const updatePlayer = (id, update) => {
     }
 }
 
+export const setActivePlayer = (id) => {
+    return {
+        type: GameActions.SetActivePlayer,
+        payload: id
+    }
+}
+
 export const GameActions = {
-    UpdateTargetGuess: 'UpdateTargetGuess',
+    SetTargetGuess: 'SetTargetGuess',
     AddPlayer: 'AddPlayer',
-    UpdatePlayer: 'UpdatePlayer'
+    UpdatePlayer: 'UpdatePlayer',
+    SetActivePlayer: 'SetActivePlayer'
 }

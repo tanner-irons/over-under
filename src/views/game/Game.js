@@ -3,8 +3,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import React from 'react';
 import Question from '../../components/question/Question';
 import Meter from '../../components/meter/Meter';
-import { getActiveResponse } from '../../store/selectors/ResponseSelectors';
-import { incrementActiveIndex, decrementActiveIndex } from './../../store/actions/ResponseActions';
+import { getActiveResponse } from '../../store/response/ResponseSelectors';
+import { incrementActiveIndex, decrementActiveIndex } from '../../store/response/ResponseActions';
 
 const Game = () => {
     const activeResponse = useSelector(getActiveResponse); 

@@ -7,9 +7,9 @@ import { Provider } from 'react-redux'
 import { createStore, applyMiddleware, combineReducers } from 'redux'
 import thunk from 'redux-thunk';
 import responses from './data/responses.json'
-import ResponseReducer from './store/reducers/ResponseReducer';
-import SettingsReducer from './store/reducers/SettingsReducer';
-import GameReducer from './store/reducers/GameReducer';
+import ResponseReducer from './store/response/ResponseReducer';
+import SettingsReducer from './store/settings/SettingsReducer';
+import GameReducer from './store/game/GameReducer';
 
 const rootReducer = combineReducers({
   game: GameReducer,

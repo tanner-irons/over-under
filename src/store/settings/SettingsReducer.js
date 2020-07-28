@@ -1,4 +1,4 @@
-import { SettingsActions } from "../actions/SettingsActions";
+import { SettingsActions } from "./SettingsActions";
 
 const initialState = {
     settings: {}
@@ -7,7 +7,7 @@ const initialState = {
 export default (state = initialState, action) => {
     switch (action.type) {
         case SettingsActions.UpdateSettings:
-            state.settings = action.payload;
+            state.settings = { ...state.settings, ...action.payload };
             return state;
         default:
             return state;

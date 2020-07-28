@@ -1,6 +1,6 @@
-import { GameActions } from "../actions/GameActions";
+import { GameActions } from "./GameActions";
 
-const Guesses = Object.freeze({
+export const Guesses = Object.freeze({
     None: Symbol('None'),
     Lower: Symbol('Lower'),
     MuchLower: Symbol('MuchLower'),
@@ -10,12 +10,13 @@ const Guesses = Object.freeze({
 
 const initialState = {
     players: new Map([['test', { id: 'test', name: 'Tanner', score: 0, guess: Guesses.None }]]),
+    activePlayerId: 'test',
     targetGuess: 50
 };
 
 export default (state = initialState, action) => {
     switch (action.type) {
-        case GameActions.UpdateTargetGuess:
+        case GameActions.SetTargetGuess:
             state.targetGuess = action.payload;
             return state;
         case GameActions.AddPlayer:
@@ -24,6 +25,9 @@ export default (state = initialState, action) => {
         case GameActions.UpdatePlayer:
             const player = state.players.get(action.payload.id);
             state.players.set(action.payload.id, { ...player, ...action.payload.update, id: action.payload.id });
+            return state;
+        case GameActions.SetActivePlayer:
+            state.activePlayerId = action.payload;
             return state;
         default:
             return state;
