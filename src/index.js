@@ -6,18 +6,18 @@ import * as serviceWorker from './serviceWorker';
 import { Provider } from 'react-redux'
 import { createStore, applyMiddleware, combineReducers } from 'redux'
 import thunk from 'redux-thunk';
-import responses from './data/responses.json'
-import ResponseReducer from './store/response/ResponseReducer';
+import questions from './data/responses.json'
 import SettingsReducer from './store/settings/SettingsReducer';
 import GameReducer from './store/game/GameReducer';
+import QuestionReducer from './store/question/QuestionReducer';
 
 const rootReducer = combineReducers({
   game: GameReducer,
-  responses: ResponseReducer,
+  questions: QuestionReducer,
   settings: SettingsReducer
 });
 
-const initialState = { responses: { responses, activeIndex: 0 } };
+const initialState = { questions: { questions, activeIndex: 0 } };
 const store = createStore(rootReducer, initialState, applyMiddleware(thunk));
 
 ReactDOM.render(

@@ -1,0 +1,44 @@
+.game {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    color: #ffffff;
+
+    .section {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        border: 3px solid #293132;
+        border-top: none;
+
+        &.section-game {
+            justify-content: center;
+            flex-basis: 75%;
+
+            .sub-section {
+                padding: 20px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+
+                &.sub-section-question {
+                    align-items: center;
+                    height: 75%;
+                    background: #547aa5;
+                }
+
+                &.sub-section-response {
+                    height: 25%;
+                    background: #293132;
+                    border-top: 3px solid #293132;
+                }
+            }
+        }
+
+        &.section-score {
+            padding: 20px;
+            flex-basis: 25%;
+            background: #4f5165;
+        }
+    }
+}

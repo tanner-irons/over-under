@@ -9,21 +9,23 @@ import Settings from './views/settings/Settings';
 const App = () => {
   return (
     <BrowserRouter>
+      <div className="game-space">
       <Menu></Menu>
-      <Switch>
-        <Route exact path="/">
-          <Start></Start>
-        </Route>
-        <Route path="/start">
-          <Start></Start>
-        </Route>
-        <Route path="/game">
-          <Game></Game>
-        </Route>
-        <Route path="/settings">
-          <Settings></Settings>
-        </Route>
-      </Switch>
+        <Switch>
+          <Route exact path="/">
+            <Game></Game>
+          </Route>
+          <Route path="/start">
+            <Start></Start>
+          </Route>
+          <Route path="/game">
+            <Game></Game>
+          </Route>
+          <Route path="/settings">
+            <Settings></Settings>
+          </Route>
+        </Switch>
+      </div>
     </BrowserRouter>
   );
 }

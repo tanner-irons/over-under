@@ -1,0 +1,22 @@
+.menu {
+    padding: 5px;
+    background: #293132;
+
+    button {
+        margin: 5px;
+        padding: 5px 10px;
+        border-radius: 2px;
+        border: none;
+        outline: none;
+        color: #ffffff;
+        background: #4f5165;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+
+        &:hover {
+            transition: all 0.1s ease-in-out;
+            color: #50d8d7;
+        }
+    }
+}

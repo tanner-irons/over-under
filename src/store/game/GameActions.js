@@ -19,10 +19,17 @@ export const updatePlayer = (id, update) => {
     }
 }
 
-export const setActivePlayer = (id) => {
+export const updateSession = (session) => {
     return {
-        type: GameActions.SetActivePlayer,
-        payload: id
+        type: GameActions.UpdateSession,
+        payload: session
+    }
+}
+
+export const updateTurn = (turn) => {
+    return {
+        type: GameActions.UpdateTurn,
+        payload: turn
     }
 }
 
@@ -30,5 +37,6 @@ export const GameActions = {
     SetTargetGuess: 'SetTargetGuess',
     AddPlayer: 'AddPlayer',
     UpdatePlayer: 'UpdatePlayer',
-    SetActivePlayer: 'SetActivePlayer'
+    UpdateSession: 'UpdateSession',
+    UpdateTurn: 'UpdateTurn'
 }

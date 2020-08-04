@@ -1,31 +1,31 @@
-export const setResponses = (responses) => {
+export const setQuestions = (questions) => {
     return {
-        type: ResponseActions.SetResponses,
-        payload: responses
+        type: QuestionActions.SetQuestions,
+        payload: questions
     }
 }
 
 export const updateActiveIndex = (index) => {
     return {
-        type: ResponseActions.UpdateActiveIndex,
+        type: QuestionActions.UpdateActiveIndex,
         payload: index
     }
 }
 
 export const incrementActiveIndex = () => {
     return {
-        type: ResponseActions.IncrementActiveIndex,
+        type: QuestionActions.IncrementActiveIndex,
     }
 }
 
 export const decrementActiveIndex = () => {
     return {
-        type: ResponseActions.DecrementActiveIndex,
+        type: QuestionActions.DecrementActiveIndex,
     }
 }
 
-export const ResponseActions = {
-    SetResponses: 'SetResponses',
+export const QuestionActions = {
+    SetQuestions: 'SetQuestions',
     UpdateActiveIndex: 'UpdateActiveIndex',
     IncrementActiveIndex: 'IncrementActiveIndex',
     DecrementActiveIndex: 'DecrementActiveIndex'

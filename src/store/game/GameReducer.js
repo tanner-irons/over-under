@@ -1,34 +1,82 @@
 import { GameActions } from "./GameActions";
 
 export const Guesses = Object.freeze({
-    None: Symbol('None'),
-    Lower: Symbol('Lower'),
-    MuchLower: Symbol('MuchLower'),
-    Higher: Symbol('Higher'),
-    MuchHigher: Symbol('MuchHigher')
+    None: 'None',
+    Lower: 'Lower',
+    MuchLower: 'Much Lower',
+    Higher: 'Higher',
+    MuchHigher: 'Much Higher'
 });
 
 const initialState = {
-    players: new Map([['test', { id: 'test', name: 'Tanner', score: 0, guess: Guesses.None }]]),
-    activePlayerId: 'test',
+    players: { 
+        one: { 
+            id: 'one', 
+            name: 'Tanner', 
+            score: 0, 
+            guess: Guesses.None
+        }, 
+        two: {
+            id: 'two', 
+            name: 'Prison Mike', 
+            score: 0, 
+            guess: Guesses.None 
+        } 
+    },
+    turn: {
+        order: ['one', 'two'],
+        activeIndex: 0
+    },
+    session: {
+        id: 'one'
+    },
     targetGuess: 50
 };
 
 export default (state = initialState, action) => {
     switch (action.type) {
         case GameActions.SetTargetGuess:
-            state.targetGuess = action.payload;
-            return state;
+            return {
+                ...state,
+                targetGuess: action.payload
+            };
         case GameActions.AddPlayer:
-            state.players.set(action.player.id, action.player);
-            return state;
+            const { newPlayer } = action.payload;
+            return {
+                ...state,
+                players: {
+                    ...state.payload.players,
+                    ...{ [newPlayer.id]: newPlayer },
+                    id: newPlayer.id
+                }
+            }
         case GameActions.UpdatePlayer:
-            const player = state.players.get(action.payload.id);
-            state.players.set(action.payload.id, { ...player, ...action.payload.update, id: action.payload.id });
-            return state;
-        case GameActions.SetActivePlayer:
-            state.activePlayerId = action.payload;
-            return state;
+            const { id, update } = action.payload;
+            const player = state.players[id];
+            return {
+                ...state,
+                players:
+                {
+                    ...state.players,
+                    ...{
+                        [id]: {
+                            ...player,
+                            ...update,
+                            id
+                        }
+                    }
+                }
+            };
+        case GameActions.UpdateSession:
+            return {
+                ...state,
+                session: { ...state.session, ...action.payload }
+            };
+        case GameActions.UpdateTurn:
+            return {
+                ...state,
+                turn: { ...state.turn, ...action.payload }
+            }
         default:
             return state;
     }
