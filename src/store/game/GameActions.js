@@ -33,10 +33,24 @@ export const updateTurn = (turn) => {
     }
 }
 
+export const incrementTurn = () => {
+    return {
+        type: GameActions.IncrementTurn
+    }
+}
+
+export const decrementTurn = () => {
+    return {
+        type: GameActions.DecrementTurn
+    }
+}
+
 export const GameActions = {
     SetTargetGuess: 'SetTargetGuess',
     AddPlayer: 'AddPlayer',
     UpdatePlayer: 'UpdatePlayer',
     UpdatePlayers: 'UpdatePlayers',
-    UpdateTurn: 'UpdateTurn'
+    UpdateTurn: 'UpdateTurn',
+    IncrementTurn: 'IncrementTurn',
+    DecrementTurn: 'DecrementTurn'
 }

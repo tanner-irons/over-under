@@ -1,6 +1,6 @@
-export const updateSettings = (session) => {
+export const updateSession = (session) => {
     return {
-        type: SessionActions.UpdateSettings,
+        type: SessionActions.UpdateSession,
         payload: session
     }
 }

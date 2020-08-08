@@ -7,12 +7,14 @@ const Meter = (props) => {
     return (
         <div className="meter">
             <div className="input">
-                <input className="guess-input" type="number" min="0" max="100" value={props.value} onChange={(event) => props.handleChange(Number(event.target.value))} />
+                <input className="guess-input" type="number" min="0" max="100" value={props.value} disabled={props.readOnly} onChange={(event) => props.handleChange(Number(event.target.value))} />
                 <img src={PercentIcon} alt="percent" />
             </div>
-            <div className="confirm">
-                <button onClick={props.handleConfirm}>Confirm</button>
-            </div>
+            {!props.readOnly &&
+                <div className="confirm">
+                    <button onClick={props.handleConfirm}>Confirm</button>
+                </div>
+            }
         </div>
     );
 };

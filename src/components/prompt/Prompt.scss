@@ -2,7 +2,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    
+
     .choices {
         display: flex;
         flex-direction: row;
@@ -21,9 +21,11 @@
                 background: #4f5165;
             }
 
-            &:hover {
-                background: #4f5165;
-                cursor: pointer;
+            &:not(.read-only) {
+                &:hover {
+                    background: #4f5165;
+                    cursor: pointer;
+                }
             }
 
             i {

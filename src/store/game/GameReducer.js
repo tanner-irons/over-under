@@ -25,7 +25,7 @@ const initialState = {
     },
     turn: {
         order: ['one', 'two'],
-        activeIndex: 1
+        activeIndex: 0
     },
     targetGuess: 50
 };
@@ -80,6 +80,28 @@ export default (state = initialState, action) => {
                     ...action.payload
                 }
             }
+        case GameActions.IncrementTurn:
+            if (state.turn.activeIndex + 1 < state.turn.order.length) {
+                return {
+                    ...state,
+                    turn: {
+                        ...state.turn,
+                        activeIndex: state.turn.activeIndex + 1
+                    }
+                };
+            }
+            return state;
+        case GameActions.DecrementTurn:
+            if (state.turn.activeIndex - 1 >= 0) {
+                return {
+                    ...state,
+                    turn: {
+                        ...state.turn,
+                        activeIndex: state.turn.activeIndex - 1
+                    }
+                };
+            }
+            return state;
         default:
             return state;
     }
