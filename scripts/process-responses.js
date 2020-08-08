@@ -17,9 +17,9 @@ fs.createReadStream('./csv/example.csv')
         const responses = Array.from(questions).map(([question, responses]) => {
             const yes = Math.round((responses.filter(response => !!response).length / responses.length) * 100);
             const no = 100 - yes;
-            return { question, count: responses.length, yes, no };
+            return { prompt: question.replace('Do you', 'What percentage of Centarians'), count: responses.length, yes, no };
         });
-        const writer = fs.createWriteStream('../src/data/responses.json')
+        const writer = fs.createWriteStream('../src/data/questions.json')
         writer.write(JSON.stringify(responses));
         writer.end();
     });

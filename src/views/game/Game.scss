@@ -16,6 +16,7 @@
             flex-basis: 75%;
 
             .sub-section {
+                position: relative;
                 padding: 20px;
                 display: flex;
                 flex-direction: column;
@@ -25,9 +26,13 @@
                     align-items: center;
                     height: 75%;
                     background: #547aa5;
+
+                    &.no-response {
+                        height: 100%;
+                    }
                 }
 
-                &.sub-section-response {
+                &.sub-section-prompt {
                     height: 25%;
                     background: #293132;
                     border-top: 3px solid #293132;

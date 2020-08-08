@@ -2,60 +2,99 @@ import './Game.scss';
 
 import { useSelector, useDispatch } from 'react-redux';
 
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import Question from '../../components/question/Question';
 import Meter from '../../components/meter/Meter';
-import { getActiveQuestion } from '../../store/question/QuestionSelectors';
-import { setTargetGuess, updatePlayer } from './../../store/game/GameActions';
-import { getActivePlayer } from './../../store/game/GameSelectors';
+import { setTargetGuess, updatePlayer, updatePlayers } from './../../store/game/GameActions';
+import { getPlayer, getCurrentPlayer } from './../../store/game/GameSelectors';
 import Score from './../../components/score/Score';
-import Response from './../../components/response/Response';
+import Prompt from '../../components/prompt/Prompt';
 import { Guesses } from '../../store/game/GameReducer';
+import { getCurrentQuestion } from './../../store/question/QuestionSelectors';
+import Timer from './../../components/timer/Timer';
 
 const Game = () => {
+    const [timerStarted, setTimerStarted] = useState(false);
     const dispatch = useDispatch();
-
+    const session = useSelector(state => state.session);
+    const sessionPlayer = useSelector(getPlayer(session.id));
     const game = useSelector(state => state.game);
+    const currentQuestion = useSelector(getCurrentQuestion);
+    const currentPlayer = useSelector(getCurrentPlayer);
 
-    const session = game.session;
-    const activePlayer = useSelector(getActivePlayer(session.id));
+    const updateTargetGuess = useCallback(
+        guess => {
+            if (guess >= 0 && guess <= 100) {
+                dispatch(setTargetGuess(guess));
+            }
+        },
+        [dispatch]
+    );
 
-    const activeQuestion = useSelector(getActiveQuestion);
+    const updatePlayerGuess = useCallback(
+        guess => dispatch(updatePlayer(sessionPlayer.id, { guess })),
+        [dispatch, sessionPlayer.id]
+    );
 
-    const updateTargetGuess = useCallback(guess => {
-        if (guess >= 0 && guess <= 100) {
-            dispatch(setTargetGuess(guess));
-            dispatch(updatePlayer(activePlayer.id, { score: guess }))
-        }
-    }, [dispatch, activePlayer.id]);
+    const scoreQuestion = useCallback(
+        () => {
+            const update = Object.entries(game.players).reduce((players, [key, player]) => {
+                if (currentPlayer.id === player.id) {
+                    if (game.targetGuess === currentQuestion.yes) {
+                        player.score += 2000;
+                    }
+                }
+                else {
+                    if (player.guess === Guesses.Lower && currentQuestion.yes < game.targetGuess) {
+                        player.score += 500;
+                    }
+                    else if (player.guess === Guesses.MuchLower && currentQuestion.yes < game.targetGuess) {
+                        if (game.targetGuess - currentQuestion.yes >= 15) {
+                            player.score += 1000;
+                        }
+                    }
+                    else if (player.guess === Guesses.Higher && currentQuestion.yes > game.targetGuess) {
+                        player.score += 500;
+                    }
+                    else if (player.guess === Guesses.MuchHigher && currentQuestion.yes > game.targetGuess) {
+                        if (currentQuestion.yes - game.targetGuess >= 15) {
+                            player.score += 1000;
+                        }
+                    }
+                }
 
-    const handleResponse = useCallback(guess => {
-        if (guess === Guesses.Lower && activeQuestion.yes < game.targetGuess) {
-            dispatch(updatePlayer(activePlayer.id, { guess, score: Number(activePlayer.score) + 500 }));
-        } else if (guess === Guesses.MuchLower && activeQuestion.yes < game.targetGuess) {
-            dispatch(updatePlayer(activePlayer.id, { guess, score: Number(activePlayer.score) + 500 }));
-        }
-        else if (guess === Guesses.Higher && activeQuestion.yes > game.targetGuess) {
-            dispatch(updatePlayer(activePlayer.id, { guess, score: Number(activePlayer.score) + 500 }));
-        } else if (guess === Guesses.MuchHigher && activeQuestion.yes > game.targetGuess) {
-            dispatch(updatePlayer(activePlayer.id, { guess, score: Number(activePlayer.score) + 500 }));
-        }
-        dispatch(updatePlayer(activePlayer.id, { guess }));
-    }, [dispatch, activeQuestion, activePlayer.id, activePlayer.score, game.targetGuess]);
+                players[key] = player;
+                return players;
+            }, {});
+
+            dispatch(updatePlayers(update));
+            setTimerStarted(false);
+        },
+        [dispatch, game.players, game.targetGuess, currentQuestion.yes, currentPlayer.id]
+    );
+
+    const handleConfirm = () => {
+        setTimerStarted(true);
+    };
 
     return (
         <div className="game">
             <div className="section section-game">
-                <div className="sub-section sub-section-question">
-                    <Question question={activeQuestion.question}></Question>
-                    <Meter data={{ percentage: game.targetGuess }} handleChange={updateTargetGuess}></Meter>
+                <div className={`sub-section sub-section-question${sessionPlayer.id === currentPlayer.id ? " no-response" : ""}`}>
+                    <Question question={currentQuestion}></Question>
+                    <Meter value={game.targetGuess} handleChange={updateTargetGuess} handleConfirm={handleConfirm}></Meter>
+                    {timerStarted &&
+                        <Timer seconds={15} handleFinish={scoreQuestion}></Timer>
+                    }
                 </div>
-                <div className="sub-section sub-section-response">
-                    <Response response={activePlayer.guess} handleChange={handleResponse}></Response>
-                </div>
+                {sessionPlayer.id !== currentPlayer.id &&
+                    <div className="sub-section sub-section-prompt">
+                        <Prompt guess={sessionPlayer.guess} handleChange={updatePlayerGuess}></Prompt>
+                    </div>
+                }
             </div>
             <div className="section section-score">
-                <Score></Score>
+                <Score players={game.players}></Score>
             </div>
         </div>
     );

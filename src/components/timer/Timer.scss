@@ -1,0 +1,44 @@
+.timer {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: flex;
+    flex-grow: 0;
+    height: 75px;
+    width: 75px;
+    margin: 10px;
+    align-items: center;
+    justify-content: center;
+
+    .spinner {
+        width: 100%;
+        height: 100%;
+        border-top: 5px solid #ffffff;
+        border-radius: 40px;
+        background: #50d8d7;
+        animation-name: spin;
+        animation-duration: 1s;
+        animation-iteration-count: infinite;
+        animation-delay: 1000ms;
+    }
+
+    .seconds {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate((-50%, -50%));
+        font-size: 24px;
+    }
+}
+
+@keyframes spin {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}

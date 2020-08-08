@@ -3,14 +3,13 @@ import './Menu.scss';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { incrementActiveIndex, decrementActiveIndex } from './../../store/question/QuestionActions';
+import { incrementCurrentIndex, decrementCurrentIndex } from './../../store/question/QuestionActions';
 
 const Menu = () => {
-    const dispatch = useDispatch();
-    const goNext = () => dispatch(incrementActiveIndex());
-    const goPrev = () => dispatch(decrementActiveIndex());
-
     const history = useHistory();
+    const dispatch = useDispatch();
+    const goNext = () => dispatch(incrementCurrentIndex());
+    const goPrev = () => dispatch(decrementCurrentIndex());
 
     return (
         <div className="menu">

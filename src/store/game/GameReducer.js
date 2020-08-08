@@ -9,26 +9,23 @@ export const Guesses = Object.freeze({
 });
 
 const initialState = {
-    players: { 
-        one: { 
-            id: 'one', 
-            name: 'Tanner', 
-            score: 0, 
+    players: {
+        one: {
+            id: 'one',
+            name: 'Tanner',
+            score: 0,
             guess: Guesses.None
-        }, 
+        },
         two: {
-            id: 'two', 
-            name: 'Prison Mike', 
-            score: 0, 
-            guess: Guesses.None 
-        } 
+            id: 'two',
+            name: 'Prison Mike',
+            score: 0,
+            guess: Guesses.None
+        }
     },
     turn: {
         order: ['one', 'two'],
-        activeIndex: 0
-    },
-    session: {
-        id: 'one'
+        activeIndex: 1
     },
     targetGuess: 50
 };
@@ -41,7 +38,7 @@ export default (state = initialState, action) => {
                 targetGuess: action.payload
             };
         case GameActions.AddPlayer:
-            const { newPlayer } = action.payload;
+            const newPlayer = action.payload;
             return {
                 ...state,
                 players: {
@@ -67,15 +64,21 @@ export default (state = initialState, action) => {
                     }
                 }
             };
-        case GameActions.UpdateSession:
+        case GameActions.UpdatePlayers:
             return {
                 ...state,
-                session: { ...state.session, ...action.payload }
+                players: {
+                    ...state.players,
+                    ...action.payload
+                }
             };
         case GameActions.UpdateTurn:
             return {
                 ...state,
-                turn: { ...state.turn, ...action.payload }
+                turn: {
+                    ...state.turn,
+                    ...action.payload
+                }
             }
         default:
             return state;

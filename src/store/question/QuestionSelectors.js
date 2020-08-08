@@ -1,3 +1,3 @@
-export const getActiveQuestion = (state) => {
-    return state.questions.questions[state.questions.activeIndex];
+export const getCurrentQuestion = (state) => {
+    return state.questions.questions[state.questions.currentIndex];
 }

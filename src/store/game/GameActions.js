@@ -19,10 +19,10 @@ export const updatePlayer = (id, update) => {
     }
 }
 
-export const updateSession = (session) => {
+export const updatePlayers = (players) => {
     return {
-        type: GameActions.UpdateSession,
-        payload: session
+        type: GameActions.UpdatePlayers,
+        payload: players
     }
 }
 
@@ -37,6 +37,6 @@ export const GameActions = {
     SetTargetGuess: 'SetTargetGuess',
     AddPlayer: 'AddPlayer',
     UpdatePlayer: 'UpdatePlayer',
-    UpdateSession: 'UpdateSession',
+    UpdatePlayers: 'UpdatePlayers',
     UpdateTurn: 'UpdateTurn'
 }

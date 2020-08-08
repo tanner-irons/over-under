@@ -1,10 +1,12 @@
-.response {
+.prompt {
     display: flex;
     align-items: center;
     justify-content: center;
+    
     .choices {
         display: flex;
         flex-direction: row;
+
         .choice {
             display: flex;
             height: 125px;

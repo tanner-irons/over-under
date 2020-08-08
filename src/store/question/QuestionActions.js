@@ -5,28 +5,28 @@ export const setQuestions = (questions) => {
     }
 }
 
-export const updateActiveIndex = (index) => {
+export const updateCurrentIndex = (index) => {
     return {
-        type: QuestionActions.UpdateActiveIndex,
+        type: QuestionActions.UpdateCurrentIndex,
         payload: index
     }
 }
 
-export const incrementActiveIndex = () => {
+export const incrementCurrentIndex = () => {
     return {
-        type: QuestionActions.IncrementActiveIndex,
+        type: QuestionActions.IncrementCurrentIndex,
     }
 }
 
-export const decrementActiveIndex = () => {
+export const decrementCurrentIndex = () => {
     return {
-        type: QuestionActions.DecrementActiveIndex,
+        type: QuestionActions.DecrementCurrentIndex,
     }
 }
 
 export const QuestionActions = {
     SetQuestions: 'SetQuestions',
-    UpdateActiveIndex: 'UpdateActiveIndex',
-    IncrementActiveIndex: 'IncrementActiveIndex',
-    DecrementActiveIndex: 'DecrementActiveIndex'
+    UpdateCurrentIndex: 'UpdateCurrentIndex',
+    IncrementCurrentIndex: 'IncrementCurrentIndex',
+    DecrementCurrentIndex: 'DecrementCurrentIndex'
 }

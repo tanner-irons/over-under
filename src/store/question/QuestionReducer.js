@@ -2,7 +2,7 @@ import { QuestionActions } from "./QuestionActions";
 
 const initialState = {
     questions: [],
-    activeIndex: 0
+    currentIndex: 0
 };
 
 export default (state = initialState, action) => {
@@ -12,24 +12,24 @@ export default (state = initialState, action) => {
                 ...state,
                 questions: action.payload
             };
-        case QuestionActions.UpdateActiveIndex:
+        case QuestionActions.UpdateCurrentIndex:
             return {
                 ...state,
-                activeIndex: action.payload
+                currentIndex: action.payload
             };
-        case QuestionActions.IncrementActiveIndex:
-            if (state.activeIndex + 1 < state.questions.length) {
+        case QuestionActions.IncrementCurrentIndex:
+            if (state.currentIndex + 1 < state.questions.length) {
                 return {
                     ...state,
-                    activeIndex: state.activeIndex + 1
+                    currentIndex: state.currentIndex + 1
                 };
             }
             return state;
-        case QuestionActions.DecrementActiveIndex:
-            if (state.activeIndex - 1 >= 0) {
+        case QuestionActions.DecrementCurrentIndex:
+            if (state.currentIndex - 1 >= 0) {
                 return {
                     ...state,
-                    activeIndex: state.activeIndex - 1
+                    currentIndex: state.currentIndex - 1
                 };
             }
             return state;
