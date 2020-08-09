@@ -45,6 +45,13 @@ export const decrementTurn = () => {
     }
 }
 
+export const toggleTimer = () => {
+    return {
+        type: GameActions.ToggleTimer
+    }
+}
+
+
 export const GameActions = {
     SetTargetGuess: 'SetTargetGuess',
     AddPlayer: 'AddPlayer',
@@ -52,5 +59,6 @@ export const GameActions = {
     UpdatePlayers: 'UpdatePlayers',
     UpdateTurn: 'UpdateTurn',
     IncrementTurn: 'IncrementTurn',
-    DecrementTurn: 'DecrementTurn'
+    DecrementTurn: 'DecrementTurn',
+    ToggleTimer: 'ToggleTimer'
 }

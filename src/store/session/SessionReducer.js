@@ -2,7 +2,6 @@ import { SessionActions } from "./SessionActions";
 
 const initialState = {
     id: 'one',
-    hostId: 'one'
 };
 
 export default (state = initialState, action) => {

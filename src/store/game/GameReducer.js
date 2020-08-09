@@ -5,7 +5,8 @@ export const Guesses = Object.freeze({
     Lower: 'Lower',
     MuchLower: 'Much Lower',
     Higher: 'Higher',
-    MuchHigher: 'Much Higher'
+    MuchHigher: 'Much Higher',
+    Target: 'Target'
 });
 
 const initialState = {
@@ -102,6 +103,11 @@ export default (state = initialState, action) => {
                 };
             }
             return state;
+        case GameActions.ToggleTimer:
+            return {
+                ...state,
+                timer: !state.timer
+            }
         default:
             return state;
     }

@@ -2,7 +2,8 @@ import { QuestionActions } from "./QuestionActions";
 
 const initialState = {
     questions: [],
-    currentIndex: 0
+    currentIndex: 0,
+    timer: false
 };
 
 export default (state = initialState, action) => {
