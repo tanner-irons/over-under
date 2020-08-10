@@ -4,20 +4,18 @@ import { useDispatch } from 'react-redux';
 
 const socket = io('http://localhost:80');
 
-export function emitDispatch(action) {
-    socket.emit('Action', action)
+export function emitSocketDispatch(action) {
+    socket.emit('Dispatch', action)
 }
 
-export function useDispatchSubscription() {
+export function useSocketDispatch() {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        socket.on('Action', (action) => {
+        socket.on('Dispatch', (action) => {
             dispatch(action);
         });
 
-        return () => socket.off('Action');
+        return () => socket.off('Dispatch');
     }, [dispatch]);
-
-    return () => socket.off('Action');
 }

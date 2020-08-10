@@ -6,7 +6,7 @@ const Timer = (props) => {
     const [timer, setTimer] = useState(props.seconds);
     const handleTick = useCallback(() => {
         if (timer === 0) {
-            props.handleFinish();
+            !props.readOnly && props.handleFinish();
             return;
         }
         setTimer(timer - 1);

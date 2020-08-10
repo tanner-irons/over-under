@@ -2,39 +2,38 @@ import './Game.scss';
 
 import React, { useCallback } from 'react';
 import { useSelector } from 'react-redux';
-import { Guesses } from '../../store/game/GameReducer';
-import { updatePlayer, updatePlayers, setTargetGuess, toggleTimer } from './../../store/game/GameActions';
+import { useSocketDispatch, emitSocketDispatch } from './../../store/socket';
+import { Guesses } from './../../store/game/GameReducer';
+import { updatePlayer, updatePlayers, setTargetGuess, toggleTimer, incrementTurn } from './../../store/game/GameActions';
 import { getPlayer, getCurrentPlayerId } from './../../store/game/GameSelectors';
-import { incrementCurrentIndex } from './../../store/question/QuestionActions';
+import { incrementQuestion } from './../../store/question/QuestionActions';
 import { getCurrentQuestion } from './../../store/question/QuestionSelectors';
-
-import * as Socket from './../../socket/socket';
-
-import Question from '../../components/question/Question';
-import Meter from '../../components/meter/Meter';
+import Question from './../../components/question/Question';
+import Meter from './../../components/meter/Meter';
 import Score from './../../components/score/Score';
-import Prompt from '../../components/prompt/Prompt';
+import Prompt from './../../components/prompt/Prompt';
 import Timer from './../../components/timer/Timer';
 
 const Game = () => {
-    const session = useSelector(state => state.session);
-    const sessionPlayer = useSelector(getPlayer(session.id));
+    useSocketDispatch();
+
     const game = useSelector(state => state.game);
     const currentQuestion = useSelector(getCurrentQuestion);
-    const currentPlayerId = useSelector(getCurrentPlayerId);
 
-    const sessionPlayerIsCurrent = sessionPlayer.id === currentPlayerId;
+    const session = useSelector(state => state.session);
+    const sessionPlayer = useSelector(getPlayer(session.id));
     const playerHasGuessed = sessionPlayer.guess !== Guesses.None;
 
-    const unsubscribe = Socket.useDispatchSubscription();
+    const currentPlayerId = useSelector(getCurrentPlayerId);
+    const sessionPlayerIsCurrent = sessionPlayer.id === currentPlayerId;
 
     const updateTargetGuess = useCallback(
-        guess => !playerHasGuessed && guess >= 0 && guess <= 100 && Socket.emitDispatch(setTargetGuess(guess)),
+        guess => !playerHasGuessed && guess >= 0 && guess <= 100 && emitSocketDispatch(setTargetGuess(guess)),
         [playerHasGuessed]
     );
 
     const updatePlayerGuess = useCallback(
-        guess => !playerHasGuessed && Socket.emitDispatch(updatePlayer(sessionPlayer.id, { guess })),
+        guess => !playerHasGuessed && emitSocketDispatch(updatePlayer(sessionPlayer.id, { guess })),
         [playerHasGuessed, sessionPlayer.id]
     );
 
@@ -62,6 +61,7 @@ const Game = () => {
                         score = player.score + 1000;
                         break;
                     default:
+                        score = player.score;
                         break;
                 }
 
@@ -69,16 +69,17 @@ const Game = () => {
                 return players;
             }, {});
 
-            Socket.emitDispatch(toggleTimer());
-            Socket.emitDispatch(updatePlayers(update));
-            Socket.emitDispatch(incrementCurrentIndex());
+            emitSocketDispatch(toggleTimer());
+            emitSocketDispatch(updatePlayers(update));
+            emitSocketDispatch(incrementQuestion());
+            emitSocketDispatch(incrementTurn());
         },
         [game.players, game.targetGuess, currentQuestion.yes, currentPlayerId]
     );
 
     const confirm = useCallback(() => {
-        Socket.emitDispatch(updatePlayer(sessionPlayer.id, { guess: Guesses.Target }));
-        Socket.emitDispatch(toggleTimer());
+        emitSocketDispatch(updatePlayer(sessionPlayer.id, { guess: Guesses.Target }));
+        emitSocketDispatch(toggleTimer());
     }, [sessionPlayer.id]);
 
     return (
@@ -88,7 +89,7 @@ const Game = () => {
                     <Question question={currentQuestion}></Question>
                     <Meter readOnly={!sessionPlayerIsCurrent || playerHasGuessed} value={game.targetGuess} handleChange={updateTargetGuess} handleConfirm={confirm}></Meter>
                     {game.timer &&
-                        <Timer seconds={5} handleFinish={sessionPlayerIsCurrent ? scoreQuestion : () => { }}></Timer>
+                        <Timer readOnly={!sessionPlayerIsCurrent} seconds={5} handleFinish={scoreQuestion}></Timer>
                     }
                 </div>
                 {!sessionPlayerIsCurrent &&

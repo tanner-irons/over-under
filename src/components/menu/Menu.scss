@@ -14,6 +14,11 @@
         font-weight: 600;
         cursor: pointer;
 
+        &.active {
+            background: #FFFFFF;
+            color: #293132;
+        }
+
         &:hover {
             transition: all 0.1s ease-in-out;
             color: #50d8d7;

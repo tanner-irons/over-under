@@ -12,13 +12,13 @@ export const updateCurrentIndex = (index) => {
     }
 }
 
-export const incrementCurrentIndex = () => {
+export const incrementQuestion = () => {
     return {
         type: QuestionActions.IncrementCurrentIndex,
     }
 }
 
-export const decrementCurrentIndex = () => {
+export const decrementQuestion = () => {
     return {
         type: QuestionActions.DecrementCurrentIndex,
     }
