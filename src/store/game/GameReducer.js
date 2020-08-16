@@ -28,15 +28,16 @@ const initialState = {
         order: ['one', 'two'],
         activeIndex: 0
     },
-    targetGuess: 50
+    target: 50,
+    timer: -1
 };
 
 export default (state = initialState, action) => {
     switch (action.type) {
-        case GameActions.SetTargetGuess:
+        case GameActions.SetTarget:
             return {
                 ...state,
-                targetGuess: action.payload
+                target: action.payload
             };
         case GameActions.AddPlayer:
             const newPlayer = action.payload;
@@ -103,10 +104,10 @@ export default (state = initialState, action) => {
                 };
             }
             return state;
-        case GameActions.ToggleTimer:
+        case GameActions.SetTimer:
             return {
                 ...state,
-                timer: !state.timer
+                timer: action.payload
             }
         default:
             return state;

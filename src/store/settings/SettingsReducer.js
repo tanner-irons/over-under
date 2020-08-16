@@ -1,7 +1,7 @@
 import { SettingsActions } from "./SettingsActions";
 
 const initialState = {
-    settings: {}
+    timer: 15
 };
 
 export default (state = initialState, action) => {

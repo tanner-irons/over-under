@@ -1,6 +1,6 @@
-export const setTargetGuess = (guess) => {
+export const setTarget = (guess) => {
     return {
-        type: GameActions.SetTargetGuess,
+        type: GameActions.SetTarget,
         payload: guess
     }
 }
@@ -45,20 +45,21 @@ export const decrementTurn = () => {
     }
 }
 
-export const toggleTimer = () => {
+export const setTimer = (time) => {
     return {
-        type: GameActions.ToggleTimer
+        type: GameActions.SetTimer,
+        payload: time
     }
 }
 
 
 export const GameActions = {
-    SetTargetGuess: 'SetTargetGuess',
+    SetTarget: 'SetTarget',
     AddPlayer: 'AddPlayer',
     UpdatePlayer: 'UpdatePlayer',
     UpdatePlayers: 'UpdatePlayers',
     UpdateTurn: 'UpdateTurn',
     IncrementTurn: 'IncrementTurn',
     DecrementTurn: 'DecrementTurn',
-    ToggleTimer: 'ToggleTimer'
+    SetTimer: 'SetTimer'
 }
