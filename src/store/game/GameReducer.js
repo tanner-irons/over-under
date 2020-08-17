@@ -100,6 +100,11 @@ export default (state = initialState, action) => {
                 };
             }
             return state;
+        case GameActions.SetTimer:
+            return {
+                ...state,
+                timer: action.payload
+            }
         default:
             return state;
     }

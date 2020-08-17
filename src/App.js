@@ -5,6 +5,7 @@ import Menu from './components/menu/Menu';
 import Start from './views/start/Start';
 import Game from './views/game/Game';
 import Settings from './views/settings/Settings';
+import Join from './views/join/Join';
 
 const App = () => {
   return (
@@ -18,7 +19,10 @@ const App = () => {
           <Route path="/start">
             <Start></Start>
           </Route>
-          <Route path="/game/:roomid">
+          <Route path="/join/:roomid">
+            <Join></Join>
+          </Route>
+          <Route path="/game">
             <Game></Game>
           </Route>
           <Route path="/settings">
