@@ -49,22 +49,22 @@ const Game = () => {
         const update = Object.entries(players).reduce((players, [key, player]) => {
             let score;
             switch (true) {
-                case currentPlayerId === player.id && target === currentQuestion.yes:
+                case currentPlayerId === player.id && target === currentQuestion.percentage:
                     score = player.score + 2500;
                     break;
-                case currentPlayerId === player.id && target >= (currentQuestion.yes - 5) && target <= (currentQuestion.yes + 5):
+                case currentPlayerId === player.id && target >= (currentQuestion.percentage - 5) && target <= (currentQuestion.percentage + 5):
                     score = player.score + 1500;
                     break;
-                case player.guess === Guesses.Lower && currentQuestion.yes < target:
+                case player.guess === Guesses.Lower && currentQuestion.percentage < target:
                     score = player.score + 500;
                     break;
-                case player.guess === Guesses.MuchLower && currentQuestion.yes < target - 15:
+                case player.guess === Guesses.MuchLower && currentQuestion.percentage < target - 15:
                     score = player.score + 1000;
                     break;
-                case player.guess === Guesses.Higher && currentQuestion.yes > target:
+                case player.guess === Guesses.Higher && currentQuestion.percentage > target:
                     score = player.score + 500;
                     break;
-                case player.guess === Guesses.MuchHigher && currentQuestion.yes > target + 15:
+                case player.guess === Guesses.MuchHigher && currentQuestion.percentage > target + 15:
                     score = player.score + 1000;
                     break;
                 default:
@@ -81,7 +81,7 @@ const Game = () => {
         emitAction(incrementTurn());
         emitAction(setTarget(50));
     },
-        [emitAction, currentPlayerId, players, target, currentQuestion.yes]
+        [emitAction, currentPlayerId, players, target, currentQuestion.percentage]
     );
 
     const onTick = useCallback((seconds) => emitAction(setTimer(seconds)), [emitAction]);

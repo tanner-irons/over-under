@@ -2,19 +2,11 @@
     {
         "prompt": "What percentage of Centarians prefer JavaScript over C#?",
         "count": 6,
-        "yes": 50,
-        "no": 50
+        "percentage": 50
     },
     {
-        "prompt": "What percentage of Centarians learned how to ride a bicycle before the age of 10?",
+        "prompt": "What percentage of Centarians knew how to ride a bike before the age of 10?",
         "count": 3,
-        "yes": 67,
-        "no": 33
-    },
-    {
-        "prompt": "What percentage of Centarians sleep in on the weekends?",
-        "count": 10,
-        "yes": 60,
-        "no": 40
+        "percentage": 67
     }
 ]
