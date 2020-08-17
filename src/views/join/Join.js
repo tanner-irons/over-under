@@ -8,6 +8,7 @@ import { addPlayer } from '../../store/game/GameActions';
 import { useDispatch } from 'react-redux';
 import { useWebSocket } from '../../store/socket';
 import { useHistory, useParams } from 'react-router-dom';
+import { once } from 'lodash';
 
 const Join = () => {
     const history = useHistory();
@@ -27,7 +28,7 @@ const Join = () => {
     const emitAction = useWebSocket(joinRoom);
     const [name, setName] = useState('');
 
-    const joinGame = useCallback(() => {
+    const joinGame = useCallback(once(() => {
         const session = {
             playerId: uuid(),
         };
@@ -46,7 +47,7 @@ const Join = () => {
         setTimeout(() => {
             history.push('/game');
         }, 2000);
-    }, [emitAction, dispatch, name, history]);
+    }), [emitAction, dispatch, name, history]);
 
     return (
         <div className="join">

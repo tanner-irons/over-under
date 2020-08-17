@@ -1,7 +1,7 @@
 import './Game.scss';
 
-import React, { useCallback, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import React, { useCallback } from 'react';
+import { useSelector } from 'react-redux';
 import { useTimer, useWebSocket } from './../../store/socket';
 import { Guesses } from './../../store/game/GameReducer';
 import { updatePlayer, updatePlayers, setTarget, incrementTurn, setTimer } from './../../store/game/GameActions';
@@ -79,6 +79,7 @@ const Game = () => {
         emitAction(updatePlayers(update));
         emitAction(incrementQuestion());
         emitAction(incrementTurn());
+        emitAction(setTarget(50));
     },
         [emitAction, currentPlayerId, players, target, currentQuestion.yes]
     );

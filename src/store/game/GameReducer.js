@@ -10,16 +10,9 @@ export const Guesses = Object.freeze({
 });
 
 const initialState = {
-    players: {
-        one: {
-            id: 'one',
-            name: 'Tanner',
-            score: 0,
-            guess: Guesses.None
-        }
-    },
+    players: {},
     turn: {
-        order: ['one'],
+        order: [],
         activeIndex: 0
     },
     target: 50
@@ -79,27 +72,23 @@ export default (state = initialState, action) => {
                 }
             }
         case GameActions.IncrementTurn:
-            if (state.turn.activeIndex + 1 < state.turn.order.length) {
-                return {
-                    ...state,
-                    turn: {
-                        ...state.turn,
-                        activeIndex: state.turn.activeIndex + 1
-                    }
-                };
-            }
-            return state;
+            const incrementedIndex = state.turn.activeIndex + 1 < state.turn.order.length ? state.turn.activeIndex + 1 : 0;
+            return {
+                ...state,
+                turn: {
+                    ...state.turn,
+                    activeIndex: incrementedIndex
+                }
+            };
         case GameActions.DecrementTurn:
-            if (state.turn.activeIndex - 1 >= 0) {
-                return {
-                    ...state,
-                    turn: {
-                        ...state.turn,
-                        activeIndex: state.turn.activeIndex - 1
-                    }
-                };
-            }
-            return state;
+            const decrementedIndex = state.turn.activeIndex - 1 >= 0 ? state.turn.activeIndex - 1 : state.turn.order.length - 1;
+            return {
+                ...state,
+                turn: {
+                    ...state.turn,
+                    activeIndex: decrementedIndex
+                }
+            };
         case GameActions.SetTimer:
             return {
                 ...state,
