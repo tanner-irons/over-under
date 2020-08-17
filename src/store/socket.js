@@ -1,42 +1,37 @@
-import { useEffect, useCallback, useRef } from 'react';
+import { useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setTimer } from './game/GameActions';
 
+const socket = new WebSocket('wss://lg274tz3m2.execute-api.us-east-1.amazonaws.com/Test');
 
-export function useWebSocket(onOpenCallback) {
+export const useWebSocket = (onOpenCallback) => {
     const dispatch = useDispatch();
     const { id } = useSelector(state => state.session);
-    const socket = useRef(null);
 
     useEffect(() => {
-        socket.current = new WebSocket('wss://lg274tz3m2.execute-api.us-east-1.amazonaws.com/Test');
-
-        socket.current.onopen = () => {
-            onOpenCallback && onOpenCallback(socket.current);
+        socket.onopen = () => {
+            onOpenCallback && onOpenCallback(socket);
         };
 
-        socket.current.onmessage = (event) => {
+        socket.onmessage = (event) => {
             dispatch(JSON.parse(event.data));
         };
 
-        return () => socket.current.close();
-    }, [dispatch, onOpenCallback, id, socket, ]);
+        return () => socket.close();
+    }, [dispatch, onOpenCallback, id]);
 
-    return useCallback((action) => socket.current.send(JSON.stringify({ route: 'dispatch', action, roomId: id })), [id, socket]);
+    return useCallback((action) => socket.send(JSON.stringify({ route: 'dispatch', action, roomId: id })), [id]);
 }
 
-export function useTimer(seconds, callback) {
-    const emitAction = useWebSocket();
-
+export const useTimer = (seconds, onTick, onDone) => {
     return useCallback(() => {
-        emitAction(setTimer(seconds));
+        onTick && onTick(seconds);
         const tickInterval = setInterval(() => {
             seconds--;
             if (seconds === -1) {
-                callback && callback();
+                onDone && onDone();
                 clearInterval(tickInterval);
             }
-            emitAction(setTimer(seconds));
+            onTick && onTick(seconds);
         }, 1000);
-    }, [emitAction, seconds, callback]);
+    }, [seconds, onTick, onDone]);
 }

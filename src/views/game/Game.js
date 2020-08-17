@@ -4,7 +4,7 @@ import React, { useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { useTimer, useWebSocket } from './../../store/socket';
 import { Guesses } from './../../store/game/GameReducer';
-import { updatePlayer, updatePlayers, setTarget, incrementTurn } from './../../store/game/GameActions';
+import { updatePlayer, updatePlayers, setTarget, incrementTurn, setTimer } from './../../store/game/GameActions';
 import { getCurrentPlayerId } from './../../store/game/GameSelectors';
 import { incrementQuestion } from './../../store/question/QuestionActions';
 import { getCurrentQuestion } from './../../store/question/QuestionSelectors';
@@ -14,6 +14,7 @@ import Meter from './../../components/meter/Meter';
 import Score from './../../components/score/Score';
 import Prompt from './../../components/prompt/Prompt';
 import Timer from './../../components/timer/Timer';
+import { throttle } from 'lodash';
 
 const Game = () => {
     const { id: sessionId } = useSelector(state => state.session);
@@ -30,9 +31,17 @@ const Game = () => {
     const sessionPlayerIsCurrent = id === currentPlayerId;
     const playerHasGuessed = guess !== Guesses.None;
 
+    const throttledEmit = throttle((action) => {
+        emitAction(action);
+    }, 1500, { leading: true, trailing: false });
+
     const updateTarget = useCallback(
-        guess => sessionPlayerIsCurrent && !playerHasGuessed && guess >= 0 && guess <= 100 && emitAction(setTarget(guess)),
-        [emitAction, playerHasGuessed, sessionPlayerIsCurrent]
+        guess => {
+            if (sessionPlayerIsCurrent && !playerHasGuessed && guess >= 0 && guess <= 100) {
+                throttledEmit(setTarget(guess))
+            }
+        },
+        [throttledEmit, playerHasGuessed, sessionPlayerIsCurrent]
     );
 
     const updatePlayerGuess = useCallback(
@@ -78,7 +87,9 @@ const Game = () => {
         [emitAction, currentPlayerId, players, target, currentQuestion.yes]
     );
 
-    const startTimer = useTimer(settings.timer, scoreQuestion);
+    const onTick = useCallback((seconds) => emitAction(setTimer(seconds)), [emitAction])
+
+    const startTimer = useTimer(settings.timer, onTick, scoreQuestion);
 
     const confirm = useCallback(() => {
         emitAction(updatePlayer(id, { guess: Guesses.Target }));
