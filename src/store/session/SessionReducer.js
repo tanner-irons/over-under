@@ -1,8 +1,8 @@
 import { SessionActions } from "./SessionActions";
 
 const initialState = {
-    id: '1234',
-    playerId: 'one'
+    id: null,
+    playerId: null
 };
 
 export default (state = initialState, action) => {

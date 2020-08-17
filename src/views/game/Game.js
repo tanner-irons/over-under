@@ -1,10 +1,10 @@
 import './Game.scss';
 
-import React, { useCallback } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useCallback, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { useTimer, useWebSocket } from './../../store/socket';
 import { Guesses } from './../../store/game/GameReducer';
-import { updatePlayer, updatePlayers, setTarget, incrementTurn, setTimer } from './../../store/game/GameActions';
+import { updatePlayer, updatePlayers, setTarget, incrementTurn } from './../../store/game/GameActions';
 import { getCurrentPlayerId } from './../../store/game/GameSelectors';
 import { incrementQuestion } from './../../store/question/QuestionActions';
 import { getCurrentQuestion } from './../../store/question/QuestionSelectors';
@@ -15,21 +15,32 @@ import Score from './../../components/score/Score';
 import Prompt from './../../components/prompt/Prompt';
 import Timer from './../../components/timer/Timer';
 import { throttle } from 'lodash';
+import Join from '../../components/join/Join';
+import { useParams } from 'react-router-dom';
+import { updateSession } from './../../store/session/SessionActions';
 
 const Game = () => {
-    const { id: sessionId } = useSelector(state => state.session);
+    const dispatch = useDispatch();
+    const { roomid } = useParams();
     const joinRoom = useCallback((socket) => {
-        socket.send(JSON.stringify({ route: 'joinRoom', roomId: sessionId }));
-    }, [sessionId]);
+        const session = {
+            id: roomid
+        };
+
+        dispatch(updateSession(session));
+
+        socket.send(JSON.stringify({ route: 'joinRoom', roomId: roomid }));
+    }, [dispatch, roomid]);
     const emitAction = useWebSocket(joinRoom);
 
-    const { id, guess } = useSelector(getSessionPlayer);
-    const { players, target, timer } = useSelector(state => state.game);
+    const sessionPlayer = useSelector(getSessionPlayer);
+    const { players, target } = useSelector(state => state.game);
     const settings = useSelector(state => state.settings);
     const currentQuestion = useSelector(getCurrentQuestion);
     const currentPlayerId = useSelector(getCurrentPlayerId);
-    const sessionPlayerIsCurrent = id === currentPlayerId;
-    const playerHasGuessed = guess !== Guesses.None;
+    const sessionPlayerIsCurrent = sessionPlayer?.id === currentPlayerId;
+    const playerHasGuessed = sessionPlayer?.guess !== Guesses.None;
+    const [timer, setTimer] = useState(-1);
 
     const throttledEmit = throttle((action) => {
         emitAction(action);
@@ -45,8 +56,8 @@ const Game = () => {
     );
 
     const updatePlayerGuess = useCallback(
-        guess => !sessionPlayerIsCurrent && !playerHasGuessed && emitAction(updatePlayer(id, { guess })),
-        [emitAction, id, playerHasGuessed, sessionPlayerIsCurrent]
+        guess => !sessionPlayerIsCurrent && !playerHasGuessed && emitAction(updatePlayer(sessionPlayer?.id, { guess })),
+        [emitAction, sessionPlayer, playerHasGuessed, sessionPlayerIsCurrent]
     );
 
     const scoreQuestion = useCallback(() => {
@@ -87,31 +98,37 @@ const Game = () => {
         [emitAction, currentPlayerId, players, target, currentQuestion.yes]
     );
 
-    const onTick = useCallback((seconds) => emitAction(setTimer(seconds)), [emitAction])
+    const onTick = useCallback((seconds) => setTimer(seconds), []);
 
     const startTimer = useTimer(settings.timer, onTick, scoreQuestion);
 
     const confirm = useCallback(() => {
-        emitAction(updatePlayer(id, { guess: Guesses.Target }));
+        emitAction(updatePlayer(sessionPlayer?.id, { guess: Guesses.Target }));
         startTimer();
-    }, [emitAction, id, startTimer]);
+    }, [emitAction, sessionPlayer, startTimer]);
 
     return (
         <div className="game">
-            <div className="section section-game">
-                <div className={`sub-section sub-section-question${sessionPlayerIsCurrent ? " no-response" : ""}`}>
-                    <Question question={currentQuestion}></Question>
-                    <Meter readOnly={!sessionPlayerIsCurrent || playerHasGuessed} value={target} handleChange={updateTarget} handleConfirm={confirm}></Meter>
-                    {timer >= 0 &&
-                        <Timer seconds={timer}></Timer>
+            {sessionPlayer?.id ?
+                <div className="section section-game">
+                    <div className={`sub-section sub-section-question${sessionPlayerIsCurrent ? " no-response" : ""}`}>
+                        <Question question={currentQuestion}></Question>
+                        <Meter readOnly={!sessionPlayerIsCurrent || playerHasGuessed} value={target} handleChange={updateTarget} handleConfirm={confirm}></Meter>
+                        {timer >= 0 &&
+                            <Timer seconds={timer}></Timer>
+                        }
+                    </div>
+                    {!sessionPlayerIsCurrent &&
+                        <div className="sub-section sub-section-prompt">
+                            <Prompt readOnly={playerHasGuessed} guess={sessionPlayer?.guess} handleChange={updatePlayerGuess}></Prompt>
+                        </div>
                     }
                 </div>
-                {!sessionPlayerIsCurrent &&
-                    <div className="sub-section sub-section-prompt">
-                        <Prompt readOnly={playerHasGuessed} guess={guess} handleChange={updatePlayerGuess}></Prompt>
-                    </div>
-                }
-            </div>
+                :
+                <div className="section section-join">
+                    <Join></Join>
+                </div>
+            }
             <div className="section section-score">
                 <Score players={players}></Score>
             </div>

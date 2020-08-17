@@ -16,20 +16,13 @@ const initialState = {
             name: 'Tanner',
             score: 0,
             guess: Guesses.None
-        },
-        two: {
-            id: 'two',
-            name: 'Prison Mike',
-            score: 0,
-            guess: Guesses.None
         }
     },
     turn: {
-        order: ['one', 'two'],
+        order: ['one'],
         activeIndex: 0
     },
-    target: 50,
-    timer: -1
+    target: 50
 };
 
 export default (state = initialState, action) => {
@@ -44,9 +37,12 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 players: {
-                    ...state.payload.players,
-                    ...{ [newPlayer.id]: newPlayer },
-                    id: newPlayer.id
+                    ...state.players,
+                    ...{ [newPlayer.id]: newPlayer }
+                },
+                turn: {
+                    ...state.turn,
+                    order: [...state.turn.order, newPlayer.id]
                 }
             }
         case GameActions.UpdatePlayer:
@@ -104,11 +100,6 @@ export default (state = initialState, action) => {
                 };
             }
             return state;
-        case GameActions.SetTimer:
-            return {
-                ...state,
-                timer: action.payload
-            }
         default:
             return state;
     }

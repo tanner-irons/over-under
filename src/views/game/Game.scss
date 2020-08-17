@@ -14,36 +14,43 @@
         &.section-game {
             justify-content: center;
             flex-basis: 75%;
-
-            .sub-section {
-                position: relative;
-                padding: 20px;
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-
-                &.sub-section-question {
-                    align-items: center;
-                    height: 75%;
-                    background: #547aa5;
-
-                    &.no-response {
-                        height: 100%;
-                    }
-                }
-
-                &.sub-section-prompt {
-                    height: 25%;
-                    background: #293132;
-                    border-top: 3px solid #293132;
-                }
-            }
         }
 
         &.section-score {
             padding: 20px;
             flex-basis: 25%;
             background: #4f5165;
+        }
+
+        &.section-join {
+            justify-content: center;
+            align-content: center;
+            flex-basis: 75%;
+            background: #547aa5;
+        }
+
+        .sub-section {
+            position: relative;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+
+            &.sub-section-question {
+                align-items: center;
+                height: 75%;
+                background: #547aa5;
+
+                &.no-response {
+                    height: 100%;
+                }
+            }
+
+            &.sub-section-prompt {
+                height: 25%;
+                background: #293132;
+                border-top: 3px solid #293132;
+            }
         }
     }
 }

@@ -13,10 +13,11 @@ export const useWebSocket = (onOpenCallback) => {
         };
 
         socket.onmessage = (event) => {
-            dispatch(JSON.parse(event.data));
+            const action = JSON.parse(event.data);
+            if (action.type) {
+                dispatch(action);
+            }
         };
-
-        return () => socket.close();
     }, [dispatch, onOpenCallback, id]);
 
     return useCallback((action) => socket.send(JSON.stringify({ route: 'dispatch', action, roomId: id })), [id]);

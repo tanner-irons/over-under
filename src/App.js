@@ -13,12 +13,12 @@ const App = () => {
       <Menu></Menu>
         <Switch>
           <Route exact path="/">
-            <Game></Game>
+            <Start></Start>
           </Route>
           <Route path="/start">
             <Start></Start>
           </Route>
-          <Route path="/game">
+          <Route path="/game/:roomid">
             <Game></Game>
           </Route>
           <Route path="/settings">
