@@ -1,7 +1,7 @@
 import { SettingsActions } from "./SettingsActions";
 
 const initialState = {
-    timer: 15
+    timeLimit: 5
 };
 
 export default (state = initialState, action) => {

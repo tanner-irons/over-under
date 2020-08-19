@@ -2,9 +2,10 @@ import './Game.scss';
 
 import React, { useCallback } from 'react';
 import { useSelector } from 'react-redux';
-import { useTimer, useWebSocket } from './../../store/socket';
+import { useWebSocket } from '../../hooks/UseWebSocket';
+import { useTimer } from './../../hooks/UseTimer';
 import { Guesses } from './../../store/game/GameReducer';
-import { updatePlayer, updatePlayers, setTarget, incrementTurn, setTimer } from './../../store/game/GameActions';
+import { updatePlayer, updatePlayers, setTarget, incrementTurn, setTimeLeft } from './../../store/game/GameActions';
 import { getCurrentPlayerId } from './../../store/game/GameSelectors';
 import { incrementQuestion } from './../../store/question/QuestionActions';
 import { getCurrentQuestion } from './../../store/question/QuestionSelectors';
@@ -19,17 +20,18 @@ import { throttle } from 'lodash';
 const Game = () => {
     const emitAction = useWebSocket();
 
-    const sessionPlayer = useSelector(getSessionPlayer);
-    const { players, target, timer } = useSelector(state => state.game);
-    const settings = useSelector(state => state.settings);
-    const currentQuestion = useSelector(getCurrentQuestion);
+    const { id, guess } = useSelector(getSessionPlayer);
+    const { players, target, timeLeft } = useSelector(state => state.game);
+    const { timeLimit } = useSelector(state => state.settings);
+    const { prompt, percentage } = useSelector(getCurrentQuestion);
     const currentPlayerId = useSelector(getCurrentPlayerId);
-    const sessionPlayerIsCurrent = sessionPlayer?.id === currentPlayerId;
-    const playerHasGuessed = sessionPlayer?.guess !== Guesses.None;
+
+    const sessionPlayerIsCurrent = id === currentPlayerId;
+    const playerHasGuessed = guess !== Guesses.None;
 
     const throttledEmit = throttle((action) => {
         emitAction(action);
-    }, 1500, { leading: true, trailing: false });
+    }, 1000, { leading: true, trailing: false });
 
     const updateTarget = useCallback(
         guess => {
@@ -41,37 +43,13 @@ const Game = () => {
     );
 
     const updatePlayerGuess = useCallback(
-        guess => !sessionPlayerIsCurrent && !playerHasGuessed && emitAction(updatePlayer(sessionPlayer?.id, { guess })),
-        [emitAction, sessionPlayer, playerHasGuessed, sessionPlayerIsCurrent]
+        guess => !sessionPlayerIsCurrent && !playerHasGuessed && emitAction(updatePlayer(id, { guess })),
+        [emitAction, id, playerHasGuessed, sessionPlayerIsCurrent]
     );
 
     const scoreQuestion = useCallback(() => {
         const update = Object.entries(players).reduce((players, [key, player]) => {
-            let score;
-            switch (true) {
-                case currentPlayerId === player.id && target === currentQuestion.percentage:
-                    score = player.score + 2500;
-                    break;
-                case currentPlayerId === player.id && target >= (currentQuestion.percentage - 5) && target <= (currentQuestion.percentage + 5):
-                    score = player.score + 1500;
-                    break;
-                case player.guess === Guesses.Lower && currentQuestion.percentage < target:
-                    score = player.score + 500;
-                    break;
-                case player.guess === Guesses.MuchLower && currentQuestion.percentage < target - 15:
-                    score = player.score + 1000;
-                    break;
-                case player.guess === Guesses.Higher && currentQuestion.percentage > target:
-                    score = player.score + 500;
-                    break;
-                case player.guess === Guesses.MuchHigher && currentQuestion.percentage > target + 15:
-                    score = player.score + 1000;
-                    break;
-                default:
-                    score = player.score;
-                    break;
-            }
-
+            const score = calculateScore(player, currentPlayerId === player.id, target, percentage)
             players[key] = { ...player, score, guess: Guesses.None };
             return players;
         }, {});
@@ -81,31 +59,29 @@ const Game = () => {
         emitAction(incrementTurn());
         emitAction(setTarget(50));
     },
-        [emitAction, currentPlayerId, players, target, currentQuestion.percentage]
+        [emitAction, players, target, percentage, currentPlayerId]
     );
 
-    const onTick = useCallback((seconds) => emitAction(setTimer(seconds)), [emitAction]);
+    const onTick = useCallback((seconds) => emitAction(setTimeLeft(seconds)), [emitAction]);
 
-    const startTimer = useTimer(settings.timer, onTick, scoreQuestion);
+    const startTimer = useTimer(timeLimit, onTick, scoreQuestion);
 
     const confirm = useCallback(() => {
-        emitAction(updatePlayer(sessionPlayer?.id, { guess: Guesses.Target }));
+        emitAction(updatePlayer(id, { guess: Guesses.Target }));
         startTimer();
-    }, [emitAction, sessionPlayer, startTimer]);
+    }, [emitAction, startTimer, id]);
 
     return (
         <div className="game">
             <div className="section section-game">
                 <div className={`sub-section sub-section-question${sessionPlayerIsCurrent ? " no-response" : ""}`}>
-                    <Question question={currentQuestion}></Question>
+                    <Question prompt={prompt}></Question>
                     <Meter readOnly={!sessionPlayerIsCurrent || playerHasGuessed} value={target} handleChange={updateTarget} handleConfirm={confirm}></Meter>
-                    {timer >= 0 &&
-                        <Timer seconds={timer}></Timer>
-                    }
+                    <Timer seconds={timeLeft}></Timer>
                 </div>
                 {!sessionPlayerIsCurrent &&
                     <div className="sub-section sub-section-prompt">
-                        <Prompt readOnly={playerHasGuessed} guess={sessionPlayer?.guess} handleChange={updatePlayerGuess}></Prompt>
+                        <Prompt readOnly={playerHasGuessed} guess={guess} handleChange={updatePlayerGuess}></Prompt>
                     </div>
                 }
             </div>
@@ -114,6 +90,25 @@ const Game = () => {
             </div>
         </div>
     );
+};
+
+const calculateScore = (player, playerIsCurrent, target, percentage) => {
+    switch (true) {
+        case playerIsCurrent && target === percentage:
+            return player.score + 2500;
+        case playerIsCurrent && target >= (percentage - 5) && target <= (percentage + 5):
+            return player.score + 1500;
+        case player.guess === Guesses.Lower && percentage < target:
+            return player.score + 500;
+        case player.guess === Guesses.MuchLower && percentage < target - 15:
+            return player.score + 1000;
+        case player.guess === Guesses.Higher && percentage > target:
+            return player.score + 500;
+        case player.guess === Guesses.MuchHigher && percentage > target + 15:
+            return player.score + 1000;
+        default:
+            return player.score;
+    }
 };
 
 export default Game;

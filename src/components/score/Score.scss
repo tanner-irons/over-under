@@ -9,6 +9,11 @@
         align-items: center;
         margin: 10px 0;
 
+        &.score-updated {
+            animation-name: scoreUpdated;
+            animation-duration: 2s;
+        }
+
         img {
             margin-right: 10px;
             height: 30px;
@@ -18,4 +23,10 @@
             font-size: 20px;
         }
     }
+}
+
+@keyframes scoreUpdated {
+    0% { background: transparent; }
+    50% { background: red; }
+    100% { background: transparent; }
 }

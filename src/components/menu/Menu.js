@@ -15,8 +15,7 @@ const Menu = () => {
     return (
         <div className="menu">
             <div className="links">
-                <button onClick={() => history.push('/new')}>New Game</button>
-                <button onClick={() => history.push('/game')}>Game</button>
+                <button onClick={() => history.push('/start')}>New Game</button>
                 <button className={session.playerId === 'one' ? "active" : ""} onClick={setSessionOne}>Session 1</button>
                 <button className={session.playerId === 'two' ? "active" : ""} onClick={setSessionTwo}>Session 2</button>
             </div>

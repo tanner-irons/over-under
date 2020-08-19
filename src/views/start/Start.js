@@ -1,50 +1,76 @@
-import React, { useCallback, useState } from 'react';
-import { addPlayer } from '../../store/game/GameActions';
-import { Guesses } from './../../store/game/GameReducer';
-import { useWebSocket } from '../../store/socket';
+import React, { useCallback, useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
+import { useWebSocket } from './../../hooks/UseWebSocket';
 import { updateSession } from './../../store/session/SessionActions';
-
+import { addPlayer, setTimeLeft, startGame } from '../../store/game/GameActions';
+import { Guesses } from './../../store/game/GameReducer';
 import { v4 as uuid } from 'uuid';
+import { once } from 'lodash';
+import Timer from '../../components/timer/Timer';
+import { useTimer } from './../../hooks/UseTimer';
+import { updateGame } from './../../store/game/GameActions';
+import { updateSettings } from './../../store/settings/SettingsActions';
+import { setQuestions } from './../../store/question/QuestionActions';
+
 const Start = () => {
     const dispatch = useDispatch();
     const history = useHistory();
-    const { roomid } = useParams();
-    const { playerId } = useSelector(state => state.session);
+    const game = useSelector(state => state.game);
+    const session = useSelector(state => state.session);
+    const settings = useSelector(state => state.settings);
+    const { questions } = useSelector(state => state.questions);
     const [name, setName] = useState('');
+    const timeLeft = useSelector(state => state.game.timeLeft);
+    const roomid = useRef(uuid());
 
     const joinRoom = useCallback((socket) => {
+        socket.send(JSON.stringify({ route: 'joinRoom', roomId: roomid.current }));
+    }, [roomid]);
+
+    const emitAction = useWebSocket(joinRoom);
+
+    useEffect(() => {
         const session = {
-            id: roomid,
+            id: roomid.current,
             playerId: uuid(),
         };
 
         dispatch(updateSession(session));
-        
-        socket.send(JSON.stringify({ route: 'joinRoom', roomId: roomid }));
-    }, [dispatch, roomid]);
+    }, [dispatch]);
 
-    const emitAction = useWebSocket(joinRoom);
-
-    const startGame = useCallback(() => {
+    const onTick = useCallback((seconds) => emitAction(setTimeLeft(seconds)), [emitAction]);
+    const onDone = useCallback(() => {
         const newPlayer = {
-            id: playerId,
+            id: session.playerId,
             name,
             score: 0,
             guess: Guesses.None
         }
 
-        emitAction(addPlayer(newPlayer));
-
+        emitAction(updateGame({ ...game, players: { ...game.players, [newPlayer.id]: newPlayer }}));
+        emitAction(updateSettings(settings));
+        emitAction(setQuestions(questions));
+        emitAction(startGame())
         setTimeout(() => {
             history.push('/game');
         }, 1000);
-    }, [emitAction, history, playerId, name]);
+    }, [emitAction, game, session, settings, questions, name, history])
+
+    const startTimer = useTimer(5, onTick, onDone);
+
+    const startGameTimer = useCallback(once(() => {
+        startTimer();
+    }), [startTimer]);
 
     return (
-        <div className="start">
-
+        <div className="join">
+            <input type="text" placeholder="Name" value={name} onChange={(event) => setName(event.target.value)}></input>
+            <button onClick={startGameTimer}>Start Game</button>
+            <Timer seconds={timeLeft}></Timer>
+            {session.id &&
+                <div>URL: /join/{session.id}</div>
+            }
         </div>
     );
 };

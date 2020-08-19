@@ -15,11 +15,17 @@ const initialState = {
         order: [],
         activeIndex: 0
     },
-    target: 50
+    target: 50,
+    started: false
 };
 
 export default (state = initialState, action) => {
     switch (action.type) {
+        case GameActions.UpdateGame:
+            return {
+                ...state,
+                ...action.payload
+            };
         case GameActions.SetTarget:
             return {
                 ...state,
@@ -92,7 +98,12 @@ export default (state = initialState, action) => {
         case GameActions.SetTimer:
             return {
                 ...state,
-                timer: action.payload
+                timeLeft: action.payload
+            }
+        case GameActions.StartGame:
+            return {
+                ...state,
+                started: true
             }
         default:
             return state;

@@ -4,8 +4,7 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { Provider } from 'react-redux'
-import { createStore, applyMiddleware, combineReducers } from 'redux'
-import thunk from 'redux-thunk';
+import { createStore, combineReducers } from 'redux'
 import questions from './data/questions.json'
 import SettingsReducer from './store/settings/SettingsReducer';
 import GameReducer from './store/game/GameReducer';
@@ -20,14 +19,12 @@ const rootReducer = combineReducers({
 });
 
 const initialState = { questions: { questions, currentIndex: 0 } };
-const store = createStore(rootReducer, initialState, applyMiddleware(thunk));
+const store = createStore(rootReducer, initialState);
 
 ReactDOM.render(
-  <React.StrictMode>
-    <Provider store={store}>
+  <Provider store={store}>
     <App />
-    </Provider>
-  </React.StrictMode>,
+  </Provider>,
   document.getElementById('root')
 );
 

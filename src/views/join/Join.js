@@ -1,19 +1,23 @@
 import './Join.scss';
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { v4 as uuid } from 'uuid';
 import { updateSession } from '../../store/session/SessionActions';
 import { Guesses } from '../../store/game/GameReducer';
 import { addPlayer } from '../../store/game/GameActions';
-import { useDispatch } from 'react-redux';
-import { useWebSocket } from '../../store/socket';
+import { useDispatch, useSelector } from 'react-redux';
+import { useWebSocket } from '../../hooks/UseWebSocket';
 import { useHistory, useParams } from 'react-router-dom';
 import { once } from 'lodash';
+import Timer from '../../components/timer/Timer';
 
 const Join = () => {
     const history = useHistory();
     const dispatch = useDispatch();
     const { roomid } = useParams();
+    const { id } = useSelector(state => state.session);
+    const { timeLeft, started } = useSelector(state => state.game);
+    const [name, setName] = useState('');
 
     const joinRoom = useCallback((socket) => {
         const session = {
@@ -26,7 +30,7 @@ const Join = () => {
     }, [dispatch, roomid]);
 
     const emitAction = useWebSocket(joinRoom);
-    const [name, setName] = useState('');
+
 
     const joinGame = useCallback(once(() => {
         const session = {
@@ -43,16 +47,20 @@ const Join = () => {
         }
 
         emitAction(addPlayer(newPlayer));
-
-        setTimeout(() => {
-            history.push('/game');
-        }, 2000);
     }), [emitAction, dispatch, name, history]);
+
+    useEffect(() => {
+        if (started) {
+            history.push('/game')
+        }
+    }, [history, started]);
+
 
     return (
         <div className="join">
             <input type="text" placeholder="Name" value={name} onChange={(event) => setName(event.target.value)}></input>
             <button onClick={joinGame}>Join Game</button>
+            <Timer seconds={timeLeft}></Timer>
         </div>
     );
 };
