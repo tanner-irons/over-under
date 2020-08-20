@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { useWebSocket } from './../../hooks/UseWebSocket';
 import { updateSession } from './../../store/session/SessionActions';
-import { addPlayer, setTimeLeft, startGame } from '../../store/game/GameActions';
+import { setTimeLeft, startGame } from '../../store/game/GameActions';
 import { Guesses } from './../../store/game/GameReducer';
 import { v4 as uuid } from 'uuid';
 import { once } from 'lodash';
@@ -69,7 +69,7 @@ const Start = () => {
             <button onClick={startGameTimer}>Start Game</button>
             <Timer seconds={timeLeft}></Timer>
             {session.id &&
-                <div>URL: /join/{session.id}</div>
+                <div>URL: localhost:3000/join/{session.id}</div>
             }
         </div>
     );
