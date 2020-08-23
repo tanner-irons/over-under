@@ -1,5 +1,4 @@
 import './Score.scss';
-import Avatar from '../../assets/avatar.svg';
 
 import React, { useRef, useEffect } from 'react';
 
@@ -20,7 +19,9 @@ const Score = (props) => {
                 const updated = player.score > prevScores.current[key];
                 return (
                     <div key={key} className={`player-score${updated ? ' score-updated' : ''}`}>
-                        <img src={Avatar} alt="Avatar" />
+                        <div className="avatar">
+                            <img src={player.avatar} alt={player.name} />
+                        </div>
                         <div className="text">{player.name} - {player.score}</div>
                     </div>
                 )

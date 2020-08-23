@@ -1,4 +1,4 @@
-.join {
+.start {
     display: flex;
     position: relative;
     height: 100%;
@@ -40,5 +40,10 @@
             cursor: pointer;
             border-color: #50d8d7;
         }
+    }
+
+    .join-url {
+        margin: 10px;
+        font-size: 20px;
     }
 }

@@ -10,6 +10,8 @@ import { useHistory, useParams } from 'react-router-dom';
 import { once } from 'lodash';
 import Timer from '../../components/timer/Timer';
 import { Guesses } from './../../models/Guesses';
+import AvatarSelect from '../../components/avatar-select/AvatarSelect';
+import Wolverine from '../../assets/wolverine.svg';
 
 const Join = () => {
     const history = useHistory();
@@ -17,6 +19,7 @@ const Join = () => {
     const { roomid } = useParams();
     const { timeLeft, started } = useSelector(state => state.game);
     const [name, setName] = useState('');
+    const [avatar, setAvatar] = useState(Wolverine);
 
     const joinRoom = useCallback((socket) => {
         const session = {
@@ -41,6 +44,7 @@ const Join = () => {
         const newPlayer = {
             id: session.playerId,
             name,
+            avatar,
             score: 0,
             guess: Guesses.None
         }
@@ -57,7 +61,8 @@ const Join = () => {
 
     return (
         <div className="join">
-            <input type="text" placeholder="Name" value={name} onChange={(event) => setName(event.target.value)}></input>
+            <AvatarSelect handleChange={setAvatar}></AvatarSelect>
+            <input type="text" className="name" placeholder="Name" value={name} onChange={(event) => setName(event.target.value)}></input>
             <button onClick={joinGame}>Join Game</button>
             <Timer seconds={timeLeft}></Timer>
         </div>

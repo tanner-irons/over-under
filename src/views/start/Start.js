@@ -1,3 +1,5 @@
+import './Start.scss';
+
 import React, { useCallback, useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -12,6 +14,8 @@ import { updateGame } from './../../store/game/GameActions';
 import { updateSettings } from './../../store/settings/SettingsActions';
 import { setQuestions } from './../../store/question/QuestionActions';
 import { Guesses } from './../../models/Guesses';
+import AvatarSelect from '../../components/avatar-select/AvatarSelect';
+import Wolverine from '../../assets/wolverine.svg';
 
 const Start = () => {
     const dispatch = useDispatch();
@@ -21,6 +25,7 @@ const Start = () => {
     const settings = useSelector(state => state.settings);
     const { questions } = useSelector(state => state.questions);
     const [name, setName] = useState('');
+    const [avatar, setAvatar] = useState(Wolverine);
     const timeLeft = useSelector(state => state.game.timeLeft);
     const roomid = useRef(uuid());
 
@@ -45,6 +50,7 @@ const Start = () => {
         const newPlayer = {
             id: session.playerId,
             name,
+            avatar,
             score: 0,
             guess: Guesses.None
         }
@@ -66,7 +72,7 @@ const Start = () => {
         setTimeout(() => {
             emitAction(startGame());
         }, 1000);
-    }, [emitAction, game, session, settings, questions, name]);
+    }, [emitAction, game, session, settings, questions, name, avatar]);
 
     useEffect(() => {
         if (game.started) {
@@ -81,13 +87,14 @@ const Start = () => {
     }), [startTimer]);
 
     return (
-        <div className="join">
-            <input type="text" placeholder="Name" value={name} onChange={(event) => setName(event.target.value)}></input>
-            <button onClick={startGameTimer}>Start Game</button>
-            <Timer seconds={timeLeft}></Timer>
+        <div className="start">
+            <AvatarSelect handleChange={setAvatar}></AvatarSelect>
+            <input type="text" className="name" placeholder="Name" value={name} onChange={(event) => setName(event.target.value)}></input>
+            <button disabled={!name} onClick={startGameTimer}>Start Game</button>
             {session.id &&
-                <div>Join URL: {window.location.origin}/join/{session.id}</div>
+                <div className="join-url">Join URL: {window.location.origin}/join/{session.id}</div>
             }
+            <Timer seconds={timeLeft}></Timer>
         </div>
     );
 };

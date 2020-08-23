@@ -25,20 +25,15 @@ const Game = () => {
     const { timeLimit } = useSelector(state => state.settings);
     const { prompt, percentage } = useSelector(getCurrentQuestion);
     const sessionPlayerIsCurrent = useSelector(isPlayerCurrent(id));
-
     const playerHasGuessed = guess !== Guesses.None;
 
-    const throttledEmit = throttle((action) => {
-        emitAction(action);
-    }, 1000, { leading: true, trailing: false });
-
     const updateTarget = useCallback(
-        guess => {
+        throttle(guess => {
             if (sessionPlayerIsCurrent && !playerHasGuessed && guess >= 0 && guess <= 100) {
-                throttledEmit(setTarget(guess))
+                emitAction(setTarget(guess));
             }
-        },
-        [throttledEmit, playerHasGuessed, sessionPlayerIsCurrent]
+        }, 250, { leading: true, trailing: false }),
+        [emitAction, playerHasGuessed, sessionPlayerIsCurrent]
     );
 
     const updatePlayerGuess = useCallback(
