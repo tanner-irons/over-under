@@ -5,9 +5,7 @@ const rl = readline.createInterface({
     output: process.stdout
 });
 
-const questions = [];
-
-const createQuestion = (resolve) =>
+const createQuestion = (resolve, questions) => {
     rl.question("What is the question? ", (prompt) => {
         rl.question("What is the percentage?", (percentage) => {
             questions.push({
@@ -16,20 +14,21 @@ const createQuestion = (resolve) =>
             });
             rl.question("Do you want to add another question? (y/n)", (answer) => {
                 if (answer.toLowerCase() !== 'n') {
-                    createQuestion(resolve);
+                    createQuestion(resolve, questions);
                 }
                 else {
-                    resolve();
+                    resolve(questions);
                 }
             });
         });
-    });
+    })
+};
 
 rl.question("What should this json file be called?", (fileName) => {
     (new Promise((resolve) => {
-        createQuestion(resolve)
+        createQuestion(resolve, [])
     }))
-        .then(() => {
+        .then(questions => {
             console.log(questions);
             const writer = fs.createWriteStream(`../src/data/${fileName}.json`)
             writer.write(JSON.stringify(questions));
