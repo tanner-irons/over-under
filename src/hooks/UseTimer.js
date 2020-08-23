@@ -30,7 +30,7 @@ export const useTimer = (seconds, onTick, onDone) => {
         }
 
         return () => clearInterval(tickInterval);
-    }, [timerStarted, onTick, onDone, timeLeft, seconds]);
+    }, [timerStarted, timeLeft]);
     
     return useCallback(() => {
         setTimeLeft(seconds);

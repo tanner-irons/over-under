@@ -58,14 +58,21 @@ const Start = () => {
             turn: {
                 ...game.turn,
                 order: [...game.turn.order, newPlayer.id]
-            }
+            },
+            timeLeft: -1
         }));
         emitAction(updateSettings(settings));
         emitAction(setQuestions(questions));
-        emitAction(startGame())
-        
-        setTimeout(() => history.push('/game'), 1000);
-    }, [emitAction, game, session, settings, questions, name, history])
+        setTimeout(() => {
+            emitAction(startGame());
+        }, 1000);
+    }, [emitAction, game, session, settings, questions, name]);
+
+    useEffect(() => {
+        if (game.started) {
+            history.push('/game');
+        }
+    }, [history, game]);
 
     const startTimer = useTimer(5, onTick, onDone);
 
