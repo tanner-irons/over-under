@@ -32,7 +32,7 @@ const Game = () => {
             if (sessionPlayerIsCurrent && !playerHasGuessed && guess >= 0 && guess <= 100) {
                 emitAction(setTarget(guess));
             }
-        }, 250, { leading: true, trailing: false }),
+        }, 150, { leading: true, trailing: false }),
         [emitAction, playerHasGuessed, sessionPlayerIsCurrent]
     );
 
@@ -90,10 +90,14 @@ const Game = () => {
 
 const calculateScore = (player, target, percentage) => {
     switch (true) {
-        case player.guess === Guesses.Target && target === percentage:
+        case player.guess === Guesses.Target && target === Number(percentage):
             return player.score + 2500;
         case player.guess === Guesses.Target && target >= (percentage - 5) && target <= (percentage + 5):
             return player.score + 1500;
+        case player.guess === Guesses.Target && target >= (percentage - 10) && target <= (percentage + 10):
+            return player.score + 1000;
+        case player.guess === Guesses.Target && target >= (percentage - 15) && target <= (percentage + 15):
+            return player.score + 500;
         case player.guess === Guesses.Lower && percentage < target:
             return player.score + 500;
         case player.guess === Guesses.MuchLower && percentage < target - 15:

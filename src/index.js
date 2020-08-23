@@ -5,7 +5,7 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { Provider } from 'react-redux'
 import { createStore, combineReducers } from 'redux'
-import questions from './data/questions.json'
+import questions from './data/stats.json'
 import SettingsReducer from './store/settings/SettingsReducer';
 import GameReducer from './store/game/GameReducer';
 import QuestionReducer from './store/question/QuestionReducer';
@@ -22,9 +22,11 @@ const initialState = { questions: { questions, currentIndex: 0 } };
 const store = createStore(rootReducer, initialState);
 
 ReactDOM.render(
+  <React.StrictMode>
   <Provider store={store}>
     <App />
-  </Provider>,
+  </Provider>
+  </React.StrictMode>,
   document.getElementById('root')
 );
 
