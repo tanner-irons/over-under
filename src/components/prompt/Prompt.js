@@ -1,7 +1,7 @@
 import './Prompt.scss';
 
 import React from 'react';
-import { Guesses } from '../../store/game/GameReducer';
+import { Guesses } from './../../models/Guesses';
 
 const Prompt = (props) => {
     return (

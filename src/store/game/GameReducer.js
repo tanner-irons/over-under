@@ -1,14 +1,5 @@
 import { GameActions } from "./GameActions";
 
-export const Guesses = Object.freeze({
-    None: 'None',
-    Lower: 'Lower',
-    MuchLower: 'Much Lower',
-    Higher: 'Higher',
-    MuchHigher: 'Much Higher',
-    Target: 'Target'
-});
-
 const initialState = {
     players: {},
     turn: {
@@ -16,7 +7,8 @@ const initialState = {
         activeIndex: 0
     },
     target: 50,
-    started: false
+    started: false,
+    timeLeft: -1
 };
 
 export default (state = initialState, action) => {

@@ -3,19 +3,18 @@ import './Join.scss';
 import React, { useState, useCallback, useEffect } from 'react';
 import { v4 as uuid } from 'uuid';
 import { updateSession } from '../../store/session/SessionActions';
-import { Guesses } from '../../store/game/GameReducer';
 import { addPlayer } from '../../store/game/GameActions';
 import { useDispatch, useSelector } from 'react-redux';
 import { useWebSocket } from '../../hooks/UseWebSocket';
 import { useHistory, useParams } from 'react-router-dom';
 import { once } from 'lodash';
 import Timer from '../../components/timer/Timer';
+import { Guesses } from './../../models/Guesses';
 
 const Join = () => {
     const history = useHistory();
     const dispatch = useDispatch();
     const { roomid } = useParams();
-    const { id } = useSelector(state => state.session);
     const { timeLeft, started } = useSelector(state => state.game);
     const [name, setName] = useState('');
 

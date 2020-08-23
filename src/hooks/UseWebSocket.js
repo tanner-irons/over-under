@@ -18,7 +18,7 @@ export const useWebSocket = (onOpen) => {
                 dispatch(action);
             }
         };
-    }, [dispatch, onOpen, id]);
+    }, [dispatch, onOpen]);
 
     return useCallback((action) => {
         socket.send(JSON.stringify({ route: 'dispatch', action, roomId: id }))
