@@ -65,12 +65,10 @@ const Join = () => {
         [history, started]
     );
 
-    const updateAvatar = useCallback(avatar => setAvatar(avatar), [setAvatar]);
-
     return (
         <div className="join">
-            <AvatarSelect handleChange={updateAvatar}></AvatarSelect>
-            <input type="text" className="name" placeholder="Name" value={name} onChange={(event) => setName(event.target.value)}></input>
+            <AvatarSelect handleChange={avatar => setAvatar(avatar)}></AvatarSelect>
+            <input type="text" className="name" placeholder="Name" value={name} onChange={event => setName(event.target.value)}></input>
             <button onClick={joinGame}>Join Game</button>
             <Timer seconds={timeLeft}></Timer>
         </div>

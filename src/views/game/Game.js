@@ -4,7 +4,7 @@ import React, { useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useWebSocket } from '../../hooks/UseWebSocket';
 import { useTimer } from './../../hooks/UseTimer';
-import { updatePlayer, updatePlayers, setTarget, incrementTurn, setTimeLeft } from './../../store/game/GameActions';
+import { updatePlayer, updatePlayers, setTarget, incrementTurn, setTimeLeft, incrementQuestion } from './../../store/game/GameActions';
 import { isPlayerCurrent, getCurrentQuestion } from './../../store/game/GameSelectors';
 import { getSessionPlayer } from './../../store/session/SessionSelectors';
 import Question from './../../components/question/Question';
@@ -50,6 +50,7 @@ const Game = () => {
 
             emitAction(updatePlayers(update));
             emitAction(incrementTurn());
+            emitAction(incrementQuestion());
             emitAction(setTarget(50));
         },
         [emitAction, players, target, percentage]
