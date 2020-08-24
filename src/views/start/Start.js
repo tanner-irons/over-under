@@ -15,76 +15,91 @@ import { updateSettings } from './../../store/settings/SettingsActions';
 import { setQuestions } from './../../store/question/QuestionActions';
 import { Guesses } from './../../models/Guesses';
 import AvatarSelect from '../../components/avatar-select/AvatarSelect';
-import Wolverine from '../../assets/wolverine.svg';
 
 const Start = () => {
     const dispatch = useDispatch();
     const history = useHistory();
+
     const game = useSelector(state => state.game);
     const session = useSelector(state => state.session);
     const settings = useSelector(state => state.settings);
     const { questions } = useSelector(state => state.questions);
     const [name, setName] = useState('');
-    const [avatar, setAvatar] = useState(Wolverine);
-    const timeLeft = useSelector(state => state.game.timeLeft);
+    const [avatar, setAvatar] = useState('');
+    
     const roomid = useRef(uuid());
 
-    const joinRoom = useCallback((socket) => {
-        socket.send(JSON.stringify({ route: 'joinRoom', roomId: roomid.current }));
-    }, [roomid]);
+    const joinRoom = useCallback(
+        socket => socket.send(JSON.stringify({ route: 'joinRoom', roomId: roomid.current })),
+        [roomid]
+    );
 
     const emitAction = useWebSocket(joinRoom);
 
-    useEffect(() => {
-        const session = {
-            id: roomid.current,
-            playerId: uuid(),
-        };
+    useEffect(
+        () => {
+            const session = {
+                id: roomid.current,
+                playerId: uuid(),
+            };
+            dispatch(updateSession(session));
+        },
+        [dispatch]
+    );
 
-        dispatch(updateSession(session));
-    }, [dispatch]);
+    useEffect(
+        () => {
+            if (game.started) {
+                history.push('/game');
+            }
+        },
+        [history, game]
+    );
 
-    const onTick = useCallback((seconds) => emitAction(setTimeLeft(seconds)), [emitAction]);
+    const onTick = useCallback(
+        seconds => emitAction(setTimeLeft(seconds)),
+        [emitAction]
+    );
 
-    const onDone = useCallback(() => {
-        const newPlayer = {
-            id: session.playerId,
-            name,
-            avatar,
-            score: 0,
-            guess: Guesses.None
-        }
+    const onDone = useCallback(
+        () => {
+            const newPlayer = {
+                id: session.playerId,
+                name,
+                avatar,
+                score: 0,
+                guess: Guesses.None
+            }
 
-        emitAction(updateGame({
-            ...game,
-            players: {
-                ...game.players,
-                [newPlayer.id]: newPlayer
-            },
-            turn: {
-                ...game.turn,
-                order: [...game.turn.order, newPlayer.id]
-            },
-            timeLeft: -1
-        }));
-        emitAction(updateSettings(settings));
-        emitAction(setQuestions(questions));
-        setTimeout(() => {
-            emitAction(startGame());
-        }, 1000);
-    }, [emitAction, game, session, settings, questions, name, avatar]);
+            emitAction(updateGame({
+                ...game,
+                players: {
+                    ...game.players,
+                    [newPlayer.id]: newPlayer
+                },
+                turn: {
+                    ...game.turn,
+                    order: [...game.turn.order, newPlayer.id]
+                },
+                timeLeft: -1
+            }));
+            emitAction(updateSettings(settings));
+            emitAction(setQuestions(questions));
+            setTimeout(() => {
+                emitAction(startGame());
+            }, 1000);
+        },
+        [emitAction, game, session, settings, questions, name, avatar]
+    );
 
-    useEffect(() => {
-        if (game.started) {
-            history.push('/game');
-        }
-    }, [history, game]);
+    const startTimer = useTimer(settings.timeLimit, onTick, onDone);
 
-    const startTimer = useTimer(5, onTick, onDone);
-
-    const startGameTimer = useCallback(once(() => {
-        startTimer();
-    }), [startTimer]);
+    const startGameTimer = useCallback(
+        once(() => {
+            startTimer();
+        }),
+        [startTimer]
+    );
 
     return (
         <div className="start">
@@ -94,7 +109,7 @@ const Start = () => {
             {session.id &&
                 <div className="join-url">Join URL: {window.location.origin}/join/{session.id}</div>
             }
-            <Timer seconds={timeLeft}></Timer>
+            <Timer seconds={game.timeLeft}></Timer>
         </div>
     );
 };

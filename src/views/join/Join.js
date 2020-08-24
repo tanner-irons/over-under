@@ -11,53 +11,59 @@ import { once } from 'lodash';
 import Timer from '../../components/timer/Timer';
 import { Guesses } from './../../models/Guesses';
 import AvatarSelect from '../../components/avatar-select/AvatarSelect';
-import Wolverine from '../../assets/wolverine.svg';
 
 const Join = () => {
     const history = useHistory();
     const dispatch = useDispatch();
     const { roomid } = useParams();
+
     const { timeLeft, started } = useSelector(state => state.game);
     const [name, setName] = useState('');
-    const [avatar, setAvatar] = useState(Wolverine);
+    const [avatar, setAvatar] = useState('');
 
-    const joinRoom = useCallback((socket) => {
-        const session = {
-            id: roomid
-        };
+    const joinRoom = useCallback(
+        socket => {
+            const session = {
+                id: roomid
+            };
 
-        dispatch(updateSession(session));
-
-        socket.send(JSON.stringify({ route: 'joinRoom', roomId: roomid }));
-    }, [dispatch, roomid]);
+            dispatch(updateSession(session));
+            socket.send(JSON.stringify({ route: 'joinRoom', roomId: roomid }));
+        },
+        [dispatch, roomid]
+    );
 
     const emitAction = useWebSocket(joinRoom);
 
+    const joinGame = useCallback(
+        once(() => {
+            const session = {
+                playerId: uuid(),
+            };
 
-    const joinGame = useCallback(once(() => {
-        const session = {
-            playerId: uuid(),
-        };
+            dispatch(updateSession(session));
 
-        dispatch(updateSession(session));
+            const newPlayer = {
+                id: session.playerId,
+                name,
+                avatar,
+                score: 0,
+                guess: Guesses.None
+            }
 
-        const newPlayer = {
-            id: session.playerId,
-            name,
-            avatar,
-            score: 0,
-            guess: Guesses.None
-        }
+            emitAction(addPlayer(newPlayer));
+        }),
+        [emitAction, dispatch, name, history]
+    );
 
-        emitAction(addPlayer(newPlayer));
-    }), [emitAction, dispatch, name, history]);
-
-    useEffect(() => {
-        if (started) {
-            history.push('/game')
-        }
-    }, [history, started]);
-
+    useEffect(
+        () => {
+            if (started) {
+                history.push('/game')
+            }
+        },
+        [history, started]
+    );
 
     return (
         <div className="join">

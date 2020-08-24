@@ -1,6 +1,6 @@
 import './AvatarSelect.scss';
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 
 import Wolverine from '../../assets/wolverine.svg';
 import WonderWoman from '../../assets/wonder-woman.svg';
@@ -61,19 +61,30 @@ const avatars = [
 const AvatarSelect = (props) => {
     const [selectedIndex, setSelectedIndex] = useState(0);
 
-    const prev = useCallback(() => {
-        if (selectedIndex - 1 >= 0) {
-            props.handleChange && props.handleChange(avatars[selectedIndex - 1]);
-            setSelectedIndex(selectedIndex - 1);
-        }
-    }, [props, selectedIndex]);
+    useEffect(
+        () => props.handleChange && props.handleChange(avatars[0]),
+        [props]
+    );
 
-    const next = useCallback(() => {
-        if (selectedIndex + 1 <= avatars.length - 1) {
-            props.handleChange && props.handleChange(avatars[selectedIndex + 1]);
-            setSelectedIndex(selectedIndex + 1);
-        }
-    }, [props, selectedIndex])
+    const prev = useCallback(
+        () => {
+            if (selectedIndex - 1 >= 0) {
+                props.handleChange && props.handleChange(avatars[selectedIndex - 1]);
+                setSelectedIndex(selectedIndex - 1);
+            }
+        },
+        [props, selectedIndex]
+    );
+
+    const next = useCallback(
+        () => {
+            if (selectedIndex + 1 <= avatars.length - 1) {
+                props.handleChange && props.handleChange(avatars[selectedIndex + 1]);
+                setSelectedIndex(selectedIndex + 1);
+            }
+        },
+        [props, selectedIndex]
+    )
 
     return (
         <div className="avatar-select">

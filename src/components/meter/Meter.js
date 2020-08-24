@@ -1,7 +1,7 @@
 import './Meter.scss';
-import PercentIcon from '../../assets/percent-blue.svg';
 
 import React from 'react';
+import PercentIcon from '../../assets/percent-blue.svg';
 
 const Meter = (props) => {
     return (

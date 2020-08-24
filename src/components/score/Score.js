@@ -6,11 +6,14 @@ const Score = (props) => {
 
     const prevScores = useRef({});
 
-    useEffect(() => {
-        Object.entries(props.players).forEach(([key, player]) => {
-            prevScores.current[key] = player.score;
-        });
-    }, [props]);
+    useEffect(
+        () => {
+            Object.entries(props.players).forEach(([key, player]) => {
+                prevScores.current[key] = player.score;
+            });
+        },
+        [props]
+    );
 
     return (
         <div className="score">

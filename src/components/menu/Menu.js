@@ -1,15 +1,20 @@
 import './Menu.scss';
 
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 
 const Menu = () => {
     const history = useHistory();
 
+    const startGame = useCallback(
+        () => history.push('/start'),
+        [history]
+    );
+
     return (
         <div className="menu">
             <div className="links">
-                <button onClick={() => history.push('/start')}>New Game</button>
+                <button onClick={startGame}>New Game</button>
             </div>
         </div>
     );
