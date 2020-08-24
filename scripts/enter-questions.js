@@ -1,5 +1,5 @@
-const readline = require("readline");
 const fs = require("fs");
+const readline = require("readline");
 const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
@@ -12,7 +12,7 @@ const createQuestion = (resolve, questions) => {
                 prompt,
                 percentage
             });
-            rl.question("Do you want to add another question? (y/n)", (answer) => {
+            rl.question("Do you want to add another question (Y/N)?", (answer) => {
                 if (answer.toLowerCase() !== 'n') {
                     createQuestion(resolve, questions);
                 }
@@ -25,13 +25,11 @@ const createQuestion = (resolve, questions) => {
 };
 
 rl.question("What should this json file be called?", (fileName) => {
-    (new Promise((resolve) => {
-        createQuestion(resolve, [])
-    }))
+    new Promise(resolve => createQuestion(resolve, []))
         .then(questions => {
-            console.log(questions);
             const writer = fs.createWriteStream(`../src/data/${fileName}.json`)
             writer.write(JSON.stringify(questions));
+            writer.end();
             rl.close();
         });
 });
