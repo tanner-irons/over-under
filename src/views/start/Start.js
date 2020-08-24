@@ -46,7 +46,11 @@ const Start = () => {
     );
 
     useEffect(
-        () => { game.started && history.push('/game') },
+        () => {
+            if (game.started) {
+                history.push('/game');
+            }
+        },
         [history, game]
     );
 
@@ -94,9 +98,11 @@ const Start = () => {
         [startTimer]
     );
 
+    const updateAvatar = useCallback(avatar => setAvatar(avatar), [setAvatar]);
+
     return (
         <div className="start">
-            <AvatarSelect handleChange={setAvatar}></AvatarSelect>
+            <AvatarSelect handleChange={updateAvatar}></AvatarSelect>
             <input type="text" className="name" placeholder="Name" value={name} onChange={(event) => setName(event.target.value)}></input>
             <button disabled={!name} onClick={startGameTimer}>Start Game</button>
             {session.id &&

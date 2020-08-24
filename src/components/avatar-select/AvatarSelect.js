@@ -1,6 +1,6 @@
 import './AvatarSelect.scss';
 
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 
 import Wolverine from '../../assets/wolverine.svg';
 import WonderWoman from '../../assets/wonder-woman.svg';
@@ -60,7 +60,7 @@ export const avatars = [
 
 const AvatarSelect = (props) => {
     const [selectedIndex, setSelectedIndex] = useState(0);
-    
+
     const prev = useCallback(
         () => {
             if (selectedIndex - 1 >= 0) {
