@@ -1,14 +1,16 @@
 import { GameActions } from "./GameActions";
 
 const initialState = {
+    started: false,
     players: {},
     turn: {
         order: [],
-        activeIndex: 0
+        activeTurnIndex: 0
     },
     target: 50,
-    started: false,
-    timeLeft: -1
+    timeLeft: -1,
+    questions: [],
+    currentQuestionIndex: 0
 };
 
 export default (state = initialState, action) => {
@@ -70,21 +72,21 @@ export default (state = initialState, action) => {
                 }
             }
         case GameActions.IncrementTurn:
-            const incrementedIndex = state.turn.activeIndex + 1 < state.turn.order.length ? state.turn.activeIndex + 1 : 0;
+            const incrementedIndex = state.turn.activeTurnIndex + 1 < state.turn.order.length ? state.turn.activeTurnIndex + 1 : 0;
             return {
                 ...state,
                 turn: {
                     ...state.turn,
-                    activeIndex: incrementedIndex
+                    activeTurnIndex: incrementedIndex
                 }
             };
         case GameActions.DecrementTurn:
-            const decrementedIndex = state.turn.activeIndex - 1 >= 0 ? state.turn.activeIndex - 1 : state.turn.order.length - 1;
+            const decrementedIndex = state.turn.activeTurnIndex - 1 >= 0 ? state.turn.activeTurnIndex - 1 : state.turn.order.length - 1;
             return {
                 ...state,
                 turn: {
                     ...state.turn,
-                    activeIndex: decrementedIndex
+                    activeTurnIndex: decrementedIndex
                 }
             };
         case GameActions.SetTimer:
@@ -97,6 +99,27 @@ export default (state = initialState, action) => {
                 ...state,
                 started: true
             }
+        case GameActions.SetQuestions:
+            return {
+                ...state,
+                questions: action.payload
+            };
+        case GameActions.IncrementQuestionIndex:
+            if (state.currentQuestionIndex + 1 < state.questions.length) {
+                return {
+                    ...state,
+                    currentQuestionIndex: state.currentQuestionIndex + 1
+                };
+            }
+            return state;
+        case GameActions.DecrementQuestionIndex:
+            if (state.currentQuestionIndex - 1 >= 0) {
+                return {
+                    ...state,
+                    currentQuestionIndex: state.currentQuestionIndex - 1
+                };
+            }
+            return state;
         default:
             return state;
     }

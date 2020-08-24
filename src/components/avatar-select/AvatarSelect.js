@@ -29,7 +29,7 @@ import Rick from '../../assets/rick.svg';
 import Spiderman from '../../assets/spiderman.svg';
 import Walt from '../../assets/walt.svg';
 
-const avatars = [
+export const avatars = [
     Batman,
     Joker,
     HarleyQuinn,
@@ -60,12 +60,7 @@ const avatars = [
 
 const AvatarSelect = (props) => {
     const [selectedIndex, setSelectedIndex] = useState(0);
-
-    useEffect(
-        () => props.handleChange && props.handleChange(avatars[0]),
-        [props]
-    );
-
+    
     const prev = useCallback(
         () => {
             if (selectedIndex - 1 >= 0) {

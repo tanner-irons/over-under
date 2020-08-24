@@ -65,6 +65,25 @@ export const startGame = () => {
     }
 }
 
+export const setQuestions = (questions) => {
+    return {
+        type: GameActions.SetQuestions,
+        payload: questions
+    }
+}
+
+export const incrementQuestion = () => {
+    return {
+        type: GameActions.IncrementQuestionIndex,
+    }
+}
+
+export const decrementQuestion = () => {
+    return {
+        type: GameActions.DecrementQuestionIndex,
+    }
+}
+
 export const GameActions = {
     UpdateGame: 'UpdateGame',
     SetTarget: 'SetTarget',
@@ -75,5 +94,8 @@ export const GameActions = {
     IncrementTurn: 'IncrementTurn',
     DecrementTurn: 'DecrementTurn',
     SetTimer: 'SetTimer',
-    StartGame: 'StarGame'
+    StartGame: 'StarGame',
+    SetQuestions: 'SetQuestions',
+    IncrementQuestionIndex: 'IncrementQuestionIndex',
+    DecrementQuestionIndex: 'DecrementQuestionIndex'
 }

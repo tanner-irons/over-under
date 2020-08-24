@@ -8,24 +8,35 @@ import { createStore, combineReducers } from 'redux'
 import questions from './data/stats.json'
 import SettingsReducer from './store/settings/SettingsReducer';
 import GameReducer from './store/game/GameReducer';
-import QuestionReducer from './store/question/QuestionReducer';
 import SessionReducer from './store/session/SessionReducer';
 
 const rootReducer = combineReducers({
   session: SessionReducer,
   game: GameReducer,
-  questions: QuestionReducer,
   settings: SettingsReducer
 });
 
-const initialState = { questions: { questions, currentIndex: 0 } };
+const initialState = {
+  game: {
+    started: false,
+    players: {},
+    turn: {
+      order: [],
+      activeTurnIndex: 0
+    },
+    target: 50,
+    timeLeft: -1,
+    questions,
+    currentQuestionIndex: 0
+  }
+};
 const store = createStore(rootReducer, initialState);
 
 ReactDOM.render(
   <React.StrictMode>
-  <Provider store={store}>
-    <App />
-  </Provider>
+    <Provider store={store}>
+      <App />
+    </Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );

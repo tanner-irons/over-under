@@ -10,7 +10,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import { once } from 'lodash';
 import Timer from '../../components/timer/Timer';
 import { Guesses } from './../../models/Guesses';
-import AvatarSelect from '../../components/avatar-select/AvatarSelect';
+import AvatarSelect, { avatars } from '../../components/avatar-select/AvatarSelect';
 
 const Join = () => {
     const history = useHistory();
@@ -19,7 +19,7 @@ const Join = () => {
 
     const { timeLeft, started } = useSelector(state => state.game);
     const [name, setName] = useState('');
-    const [avatar, setAvatar] = useState('');
+    const [avatar, setAvatar] = useState(avatars[0]);
 
     const joinRoom = useCallback(
         socket => {
@@ -57,11 +57,7 @@ const Join = () => {
     );
 
     useEffect(
-        () => {
-            if (started) {
-                history.push('/game')
-            }
-        },
+        () => started && history.push('/game'),
         [history, started]
     );
 

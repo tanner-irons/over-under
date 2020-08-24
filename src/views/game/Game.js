@@ -5,9 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useWebSocket } from '../../hooks/UseWebSocket';
 import { useTimer } from './../../hooks/UseTimer';
 import { updatePlayer, updatePlayers, setTarget, incrementTurn, setTimeLeft } from './../../store/game/GameActions';
-import { isPlayerCurrent } from './../../store/game/GameSelectors';
-import { incrementQuestion } from './../../store/question/QuestionActions';
-import { getCurrentQuestion } from './../../store/question/QuestionSelectors';
+import { isPlayerCurrent, getCurrentQuestion } from './../../store/game/GameSelectors';
 import { getSessionPlayer } from './../../store/session/SessionSelectors';
 import Question from './../../components/question/Question';
 import Meter from './../../components/meter/Meter';
@@ -26,17 +24,14 @@ const Game = () => {
     const playerHasGuessed = guess !== Guesses.None;
 
     const { players, target, timeLeft } = useSelector(state => state.game);
-
     const { prompt, percentage } = useSelector(getCurrentQuestion);
-
     const { timeLimit } = useSelector(state => state.settings);
 
     const updateTarget = useCallback(
-        throttle(guess => {
-            if (playerIsCurrent && !playerHasGuessed && guess >= 0 && guess <= 100) {
-                emitAction(setTarget(guess));
-            }
-        }, 150, { leading: true, trailing: false }),
+        throttle(
+            guess => playerIsCurrent && !playerHasGuessed && guess >= 0 && guess <= 100 && emitAction(setTarget(guess)),
+            150,
+            { leading: true, trailing: false }),
         [emitAction, playerHasGuessed, playerIsCurrent]
     );
 
@@ -54,7 +49,6 @@ const Game = () => {
             }, {});
 
             emitAction(updatePlayers(update));
-            emitAction(incrementQuestion());
             emitAction(incrementTurn());
             emitAction(setTarget(50));
         },

@@ -12,9 +12,8 @@ import Timer from '../../components/timer/Timer';
 import { useTimer } from './../../hooks/UseTimer';
 import { updateGame } from './../../store/game/GameActions';
 import { updateSettings } from './../../store/settings/SettingsActions';
-import { setQuestions } from './../../store/question/QuestionActions';
 import { Guesses } from './../../models/Guesses';
-import AvatarSelect from '../../components/avatar-select/AvatarSelect';
+import AvatarSelect, { avatars } from '../../components/avatar-select/AvatarSelect';
 
 const Start = () => {
     const dispatch = useDispatch();
@@ -23,10 +22,9 @@ const Start = () => {
     const game = useSelector(state => state.game);
     const session = useSelector(state => state.session);
     const settings = useSelector(state => state.settings);
-    const { questions } = useSelector(state => state.questions);
     const [name, setName] = useState('');
-    const [avatar, setAvatar] = useState('');
-    
+    const [avatar, setAvatar] = useState(avatars[0]);
+
     const roomid = useRef(uuid());
 
     const joinRoom = useCallback(
@@ -48,11 +46,7 @@ const Start = () => {
     );
 
     useEffect(
-        () => {
-            if (game.started) {
-                history.push('/game');
-            }
-        },
+        () => { game.started && history.push('/game') },
         [history, game]
     );
 
@@ -84,12 +78,11 @@ const Start = () => {
                 timeLeft: -1
             }));
             emitAction(updateSettings(settings));
-            emitAction(setQuestions(questions));
             setTimeout(() => {
                 emitAction(startGame());
             }, 1000);
         },
-        [emitAction, game, session, settings, questions, name, avatar]
+        [emitAction, game, session, settings, name, avatar]
     );
 
     const startTimer = useTimer(settings.timeLimit, onTick, onDone);
