@@ -1,6 +1,5 @@
 const csv = require('csv-parser');
 const fs = require('fs');
-const { performance } = require('perf_hooks');
 
 const questions = new Map();
 fs.createReadStream('./csv/example.csv')

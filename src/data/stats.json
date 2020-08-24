@@ -1,106 +1,106 @@
 [
     {
         "prompt": "What percentage of people are left-handed?",
-        "percentage": "11"
+        "percentage": 11
     },
     {
         "prompt": "What percentage of plant life is found in the ocean?",
-        "percentage": "85"
+        "percentage": 85
     },
     {
         "prompt": "What percentage of it's life does a cat spend asleep?",
-        "percentage": "66"
+        "percentage": 66
     },
     {
         "prompt": "What percentage of indoor water use do toilets account for?",
-        "percentage": "35"
+        "percentage": 35
     },
     {
         "prompt": "What percentage of the world considers rice a staple food?",
-        "percentage": "50"
+        "percentage": 50
     },
     {
         "prompt": "what percentage does water expand by when frozen?",
-        "percentage": "9"
+        "percentage": 9
     },
     {
         "prompt": "What percentage of food in developed countries is thrown away?",
-        "percentage": "27"
+        "percentage": 27
     },
     {
         "prompt": "What percentage of the oxygen we breath is used by the brain?",
-        "percentage": "25"
+        "percentage": 25
     },
     {
         "prompt": "What percentage of a cucumber is water?",
-        "percentage": "96"
+        "percentage": 96
     },
     {
         "prompt": "What percentage of the U.S. eats McDonalds on any given day?",
-        "percentage": "7"
+        "percentage": 7
     },
     {
         "prompt": "What percentage of countries are north of the equator?",
-        "percentage": "75"
+        "percentage": 75
     },
     {
         "prompt": "What percentage of all land in the U.S. is owned by the government?",
-        "percentage": "32"
+        "percentage": 32
     },
     {
         "prompt": "What percentage of all volcanic activity occurs on land?",
-        "percentage": "10"
+        "percentage": 10
     },
     {
         "prompt": "What percentage of the world's trash does the U.S. produce?",
-        "percentage": "19"
+        "percentage": 19
     },
     {
         "prompt": "What percentage of almonds are used by chocolate manufacturers?",
-        "percentage": "40"
+        "percentage": 40
     },
     {
         "prompt": "What percentage of people make their bed in the morning?",
-        "percentage": "79"
+        "percentage": 79
     },
     {
         "prompt": "What percentage of the earth does ice cover?",
-        "percentage": "15"
+        "percentage": 15
     },
     {
         "prompt": "What percentage of coupons printed are actually used?",
-        "percentage": "6"
+        "percentage": 6
     },
     {
         "prompt": "What percentage of it's history has America spent at war?",
-        "percentage": "93"
+        "percentage": 93
     },
     {
         "prompt": "What percentage of peanuts end up in peanut butter?",
-        "percentage": "33"
+        "percentage": 33
     },
     {
         "prompt": "What percentage of the Earth is used for crops?",
-        "percentage": "11"
+        "percentage": 11
     },
     {
         "prompt": "What percentage of Americans say they don't know either of their neighbors?",
-        "percentage": "72"
+        "percentage": 72
     },
     {
         "prompt": "What percentage of families have named a child after a relative?",
-        "percentage": "57"
+        "percentage": 57
     },
     {
         "prompt": "What percentage of creatures on Earth are smaller than a chicken egg?",
-        "percentage": "95"
+        "percentage": 95
     },
     {
         "prompt": "What percentage of violence on TV occurs in cartoons?",
-        "percentage": "46"
+        "percentage": 46
     },
     {
         "prompt": "What percentage of kids say that pizza is their favorite food?",
-        "percentage": "58"
+        "percentage": 58
     }
 ]

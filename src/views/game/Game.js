@@ -99,7 +99,7 @@ const Game = () => {
 
 const calculateScore = (player, target, percentage) => {
     switch (true) {
-        case player.guess === Guesses.Target && target === Number(percentage):
+        case player.guess === Guesses.Target && target === percentage:
             return player.score + 2500;
         case player.guess === Guesses.Target && target >= (percentage - 5) && target <= (percentage + 5):
             return player.score + 1500;

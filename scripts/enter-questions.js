@@ -10,7 +10,7 @@ const createQuestion = (resolve, questions) => {
         rl.question("What is the percentage?", (percentage) => {
             questions.push({
                 prompt,
-                percentage
+                percentage: Number(percentage)
             });
             rl.question("Do you want to add another question (Y/N)?", (answer) => {
                 if (answer.toLowerCase() !== 'n') {
