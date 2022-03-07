@@ -6,6 +6,7 @@ import Start from './views/start/Start';
 import Game from './views/game/Game';
 import Settings from './views/settings/Settings';
 import Join from './views/join/Join';
+import Victory from './views/victory/Victory';
 
 const App = () => {
   return (
@@ -24,6 +25,9 @@ const App = () => {
           </Route>
           <Route path="/game">
             <Game></Game>
+          </Route>
+          <Route path="/victory">
+            <Victory></Victory>
           </Route>
           <Route path="/settings">
             <Settings></Settings>

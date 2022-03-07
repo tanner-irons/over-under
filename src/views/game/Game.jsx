@@ -1,6 +1,7 @@
 import './Game.scss';
 
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useWebSocket } from '../../hooks/UseWebSocket';
 import { useTimer } from './../../hooks/UseTimer';
@@ -18,6 +19,7 @@ import { Guesses } from './../../models/Guesses';
 const Game = () => {
     const dispatch = useDispatch();
     const emitAction = useWebSocket();
+    const history = useHistory();
 
     const { id, guess } = useSelector(getSessionPlayer);
     const playerIsCurrent = useSelector(isPlayerCurrent(id));
@@ -27,18 +29,13 @@ const Game = () => {
     const { prompt, percentage } = useSelector(getCurrentQuestion);
     const { timeLimit } = useSelector(state => state.settings);
 
-    const updateTarget = useCallback(
-        throttle(
-            guess => playerIsCurrent && !playerHasGuessed && guess >= 0 && guess <= 100 && emitAction(setTarget(guess)),
-            150,
-            { leading: true, trailing: false }),
-        [emitAction, playerHasGuessed, playerIsCurrent]
+    const updateTarget = throttle(
+        guess => playerIsCurrent && !playerHasGuessed && guess >= 0 && guess <= 100 && emitAction(setTarget(guess)),
+        150,
+        { leading: true, trailing: false }
     );
 
-    const updatePlayerGuess = useCallback(
-        guess => !playerIsCurrent && !playerHasGuessed && emitAction(updatePlayer(id, { guess })),
-        [emitAction, id, playerHasGuessed, playerIsCurrent]
-    );
+    const updatePlayerGuess = guess => !playerIsCurrent && !playerHasGuessed && emitAction(updatePlayer(id, { guess }));
 
     const scoreQuestion = useCallback(
         () => {
@@ -69,6 +66,15 @@ const Game = () => {
             startTimer();
         },
         [dispatch, startTimer, id]
+    );
+
+    useEffect(
+        () => {
+            if (!prompt) {
+                history.push('/victory');
+            }
+        },
+        [prompt, history]
     );
 
     return (

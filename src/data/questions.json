@@ -1,12 +1,1 @@
-[
-    {
-        "prompt": "What percentage of Centarians prefer JavaScript over C#?",
-        "count": 6,
-        "percentage": 50
-    },
-    {
-        "prompt": "What percentage of Centarians knew how to ride a bike before the age of 10?",
-        "count": 3,
-        "percentage": 67
-    }
-]
+[{"prompt":"What percentage of people are left-handed?","percentage":11}]

@@ -2,12 +2,12 @@ import './Timer.scss';
 
 import React from 'react';
 
-const Timer = (props) => {
+const Timer = ({seconds}) => {
     return (
-        props.seconds >= 0 &&
+        seconds >= 0 &&
         <div className="timer">
             <div className="spinner"></div>
-            <span className="seconds">{props.seconds}</span>
+            <span className="seconds">{seconds}</span>
         </div>
     );
 };

@@ -11,5 +11,5 @@ export const isPlayerCurrent = (id) => {
 }
 
 export const getCurrentQuestion = (state) => {
-    return state.game.questions[state.game.currentQuestionIndex];
+    return state.game.questions[state.game.currentQuestionIndex] ?? {};
 }

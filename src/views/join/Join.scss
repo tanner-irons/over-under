@@ -36,7 +36,7 @@
         color: #ffffff;
         outline: none;
 
-        &:hover {
+        &:hover:not(:disabled) {
             cursor: pointer;
             border-color: #50d8d7;
         }

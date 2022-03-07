@@ -105,13 +105,10 @@ export default (state = initialState, action) => {
                 questions: action.payload
             };
         case GameActions.IncrementQuestionIndex:
-            if (state.currentQuestionIndex + 1 < state.questions.length) {
-                return {
-                    ...state,
-                    currentQuestionIndex: state.currentQuestionIndex + 1
-                };
-            }
-            return state;
+            return {
+                ...state,
+                currentQuestionIndex: state.currentQuestionIndex + 1
+            };
         case GameActions.DecrementQuestionIndex:
             if (state.currentQuestionIndex - 1 >= 0) {
                 return {

@@ -5,12 +5,6 @@
     color: #ffffff;
 
     .section {
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-        border: 3px solid #293132;
-        border-top: none;
-
         &.section-game {
             justify-content: center;
             flex-basis: 75%;
@@ -23,12 +17,6 @@
         }
 
         .sub-section {
-            position: relative;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-
             &.sub-section-question {
                 align-items: center;
                 height: 75%;

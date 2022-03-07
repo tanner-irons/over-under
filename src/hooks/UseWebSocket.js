@@ -1,7 +1,7 @@
 import { useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-const socket = new WebSocket('wss://lg274tz3m2.execute-api.us-east-1.amazonaws.com/Test');
+const socket = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL);
 
 export const useWebSocket = (onOpen) => {
     const dispatch = useDispatch();
@@ -14,7 +14,8 @@ export const useWebSocket = (onOpen) => {
             };
 
             socket.onmessage = (event) => {
-                const action = JSON.parse(event.data);
+                const data = JSON.parse(event.data);
+                const action = JSON.parse(data.data);
                 if (action.type) {
                     dispatch(action);
                 }

@@ -1,0 +1,28 @@
+.victory {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    color: #ffffff;
+    background: #547aa5;
+
+    .section {
+        &.section-winner {
+            justify-content: center;
+            flex-basis: 75%;
+            align-items: center;
+            justify-content: center;
+
+            .text {
+                display: flex;
+                font-size: 24px;
+                font-weight: 600;
+            }
+        }
+
+        &.section-score {
+            padding: 20px;
+            flex-basis: 25%;
+            background: #4f5165;
+        }
+    }
+}

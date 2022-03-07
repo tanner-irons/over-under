@@ -1,6 +1,6 @@
 import './AvatarSelect.scss';
 
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 
 import Wolverine from '../../assets/wolverine.svg';
 import WonderWoman from '../../assets/wonder-woman.svg';
@@ -58,28 +58,22 @@ export const avatars = [
     NinjaTurtle
 ];
 
-const AvatarSelect = (props) => {
+const AvatarSelect = ({ handleChange }) => {
     const [selectedIndex, setSelectedIndex] = useState(0);
 
-    const prev = useCallback(
-        () => {
-            if (selectedIndex - 1 >= 0) {
-                props.handleChange && props.handleChange(avatars[selectedIndex - 1]);
-                setSelectedIndex(selectedIndex - 1);
-            }
-        },
-        [props, selectedIndex]
-    );
+    const prev = () => {
+        if (selectedIndex - 1 >= 0) {
+            handleChange && handleChange(avatars[selectedIndex - 1]);
+            setSelectedIndex(selectedIndex - 1);
+        }
+    };
 
-    const next = useCallback(
-        () => {
-            if (selectedIndex + 1 <= avatars.length - 1) {
-                props.handleChange && props.handleChange(avatars[selectedIndex + 1]);
-                setSelectedIndex(selectedIndex + 1);
-            }
-        },
-        [props, selectedIndex]
-    )
+    const next = () => {
+        if (selectedIndex + 1 <= avatars.length - 1) {
+            handleChange && handleChange(avatars[selectedIndex + 1]);
+            setSelectedIndex(selectedIndex + 1);
+        }
+    };
 
     return (
         <div className="avatar-select">

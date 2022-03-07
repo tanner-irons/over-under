@@ -5,7 +5,7 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { Provider } from 'react-redux'
 import { createStore, combineReducers } from 'redux'
-import questions from './data/stats.json'
+import questions from './data/questions.json'
 import SettingsReducer from './store/settings/SettingsReducer';
 import GameReducer from './store/game/GameReducer';
 import SessionReducer from './store/session/SessionReducer';
