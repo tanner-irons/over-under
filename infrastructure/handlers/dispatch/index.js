@@ -32,7 +32,7 @@ function getConnections(roomId) {
     }).promise();
 }
 
-exports.handler = async(event, context, callback) => {
+exports.handler = async (event, context, callback) => {
     const send = init(event);
     const { action, roomId } = JSON.parse(event.body);
     const connections = await getConnections(roomId);

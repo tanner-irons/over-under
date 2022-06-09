@@ -1,7 +1,7 @@
 const AWS = require('aws-sdk');
 const ddb = new AWS.DynamoDB.DocumentClient();
 
-exports.handler = async(event, context, callback) => {
+exports.handler = async (event, context, callback) => {
     const connectionId = event.requestContext.connectionId;
     const roomId = JSON.parse(event.body).roomId;
     await joinRoom(connectionId, roomId);
