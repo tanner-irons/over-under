@@ -8,7 +8,7 @@ const Score = ({players}) => {
 
     useEffect(
         () => {
-            Object.entries(players).forEach(([key, player]) => {
+            Object.entries<any>(players).forEach(([key, player]) => {
                 prevScores.current[key] = player.score;
             });
         },
@@ -18,7 +18,7 @@ const Score = ({players}) => {
     return (
         <div className="score">
             <div className="title">Scoreboard</div>
-            {Object.entries(players).map(([key, player]) => {
+            {Object.entries<any>(players).map(([key, player]) => {
                 const updated = player.score > prevScores.current[key];
                 return (
                     <div key={key} className={`player-score${updated ? ' score-updated' : ''}`}>

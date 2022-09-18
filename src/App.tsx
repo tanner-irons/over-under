@@ -12,7 +12,7 @@ const App = () => {
   return (
     <BrowserRouter>
       <div className="game-space">
-      <Menu></Menu>
+        <Menu></Menu>
         <Switch>
           <Route exact path="/">
             <Start></Start>

@@ -6,7 +6,7 @@ const Lobby = ({players}) => {
     return (
         <div className="lobby">
             <div className="title">Players</div>
-            {Object.entries(players).map(([key, player]) => {
+            {Object.entries<any>(players).map(([key, player]) => {
                 return (
                     <div key={key} className="player">
                         <div className="avatar">

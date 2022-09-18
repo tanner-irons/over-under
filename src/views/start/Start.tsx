@@ -1,7 +1,7 @@
 import './Start.scss';
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { useWebSocket } from '../../hooks/UseWebSocket';
 import { updateSession } from '../../store/session/SessionActions';
@@ -15,14 +15,15 @@ import { updateSettings } from '../../store/settings/SettingsActions';
 import { Guesses } from '../../models/Guesses';
 import AvatarSelect, { avatars } from '../../components/avatar-select/AvatarSelect';
 import Lobby from '../../components/lobby/Lobby';
+import { useRootSelector } from '../../hooks/UseRootSelector';
 
 const Start = () => {
     const dispatch = useDispatch();
     const history = useHistory();
 
-    const game = useSelector(state => state.game);
-    const session = useSelector(state => state.session);
-    const settings = useSelector(state => state.settings);
+    const game = useRootSelector(state => state.game);
+    const session = useRootSelector(state => state.session);
+    const settings = useRootSelector(state => state.settings);
     const [name, setName] = useState('');
     const [avatar, setAvatar] = useState(avatars[0]);
     const [startClicked, setStartClicked] = useState(false);
@@ -107,7 +108,7 @@ const Start = () => {
                 <Timer seconds={game.timeLeft}></Timer>
             </div>
             <div className="section section-lobby">
-                <Lobby players={Object.values(game.players).filter(p => p.id !== session.playerId)}></Lobby>
+                <Lobby players={Object.values<any>(game.players).filter(p => p.id !== session.playerId)}></Lobby>
             </div>
         </div>
     );

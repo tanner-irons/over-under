@@ -9,10 +9,7 @@ export default (state = initialState, action) => {
         case SettingsActions.UpdateSettings:
             return {
                 ...state,
-                settings: {
-                    ...state.settings,
-                    ...action.payload
-                }
+                ...action.payload
             }
         default:
             return state;

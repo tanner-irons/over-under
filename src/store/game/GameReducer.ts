@@ -1,6 +1,7 @@
+import { IGame } from "../../models/Game";
 import { GameActions } from "./GameActions";
 
-const initialState = {
+const initialState: IGame = {
     started: false,
     players: {},
     turn: {

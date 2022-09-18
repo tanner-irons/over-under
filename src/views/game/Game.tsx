@@ -1,20 +1,21 @@
 import './Game.scss';
 
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useWebSocket } from '../../hooks/UseWebSocket';
-import { useTimer } from './../../hooks/UseTimer';
-import { updatePlayer, updatePlayers, setTarget, incrementTurn, setTimeLeft, incrementQuestion } from './../../store/game/GameActions';
-import { isPlayerCurrent, getCurrentQuestion } from './../../store/game/GameSelectors';
-import { getSessionPlayer } from './../../store/session/SessionSelectors';
-import Question from './../../components/question/Question';
-import Meter from './../../components/meter/Meter';
-import Score from './../../components/score/Score';
+import { useTimer } from '../../hooks/UseTimer';
+import { updatePlayer, updatePlayers, setTarget, incrementTurn, setTimeLeft, incrementQuestion } from '../../store/game/GameActions';
+import { isPlayerCurrent, getCurrentQuestion } from '../../store/game/GameSelectors';
+import { getSessionPlayer } from '../../store/session/SessionSelectors';
+import Question from '../../components/question/Question';
+import Meter from '../../components/meter/Meter';
+import Score from '../../components/score/Score';
 import Vote from '../../components/vote/Vote';
-import Timer from './../../components/timer/Timer';
+import Timer from '../../components/timer/Timer';
 import { throttle } from 'lodash';
-import { Guesses } from './../../models/Guesses';
+import { Guesses } from '../../models/Guesses';
+import { useRootSelector } from '../../hooks/UseRootSelector';
 
 const Game = () => {
     const dispatch = useDispatch();
@@ -25,21 +26,21 @@ const Game = () => {
     const playerIsCurrent = useSelector(isPlayerCurrent(id));
     const playerHasGuessed = guess !== Guesses.None;
 
-    const { players, target, timeLeft } = useSelector(state => state.game);
+    const { players, target, timeLeft } = useRootSelector(state => state.game);
     const { prompt, percentage } = useSelector(getCurrentQuestion);
-    const { timeLimit } = useSelector(state => state.settings);
+    const { timeLimit } = useRootSelector(state => state.settings);
 
-    const updateTarget = throttle(
+    const updateTarget = useRef(throttle(
         guess => playerIsCurrent && !playerHasGuessed && guess >= 0 && guess <= 100 && emitAction(setTarget(guess)),
         150,
         { leading: true, trailing: false }
-    );
+    ));
 
     const updatePlayerGuess = guess => !playerIsCurrent && !playerHasGuessed && emitAction(updatePlayer(id, { guess }));
 
     const scoreQuestion = useCallback(
         () => {
-            const update = Object.entries(players).reduce((players, [key, player]) => {
+            const update = Object.entries<any>(players).reduce((players, [key, player]) => {
                 const score = calculateScore(player, target, percentage)
                 players[key] = { ...player, score, guess: Guesses.None };
                 return players;
@@ -82,7 +83,7 @@ const Game = () => {
             <div className="section section-game">
                 <div className={`sub-section sub-section-question${playerIsCurrent ? " no-response" : ""}`}>
                     <Question prompt={prompt}></Question>
-                    <Meter readOnly={!playerIsCurrent || playerHasGuessed} value={target} handleChange={updateTarget} handleConfirm={confirm}></Meter>
+                    <Meter readOnly={!playerIsCurrent || playerHasGuessed} value={target} handleChange={updateTarget.current} handleConfirm={confirm}></Meter>
                     <Timer seconds={timeLeft}></Timer>
                 </div>
                 {!playerIsCurrent &&

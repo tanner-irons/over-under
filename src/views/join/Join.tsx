@@ -11,13 +11,14 @@ import { once } from 'lodash';
 import Timer from '../../components/timer/Timer';
 import { Guesses } from '../../models/Guesses';
 import AvatarSelect, { avatars } from '../../components/avatar-select/AvatarSelect';
+import { useRootSelector } from '../../hooks/UseRootSelector';
 
 const Join = () => {
     const history = useHistory();
     const dispatch = useDispatch();
-    const { roomid } = useParams();
+    const { roomid } = useParams<any>();
 
-    const { timeLeft, started } = useSelector(state => state.game);
+    const { timeLeft, started } = useRootSelector(state => state.game);
     const [name, setName] = useState('');
     const [avatar, setAvatar] = useState(avatars[0]);
     const [joined, setJoined] = useState(false);

@@ -36,6 +36,7 @@ exports.handler = async (event, context, callback) => {
     const send = init(event);
     const { action, roomId } = JSON.parse(event.body);
     const connections = await getConnections(roomId);
+    console.log(connections.Items);
     const events = connections.Items.map(connection => {
         return send(connection.connectionid, JSON.stringify(action));
     });

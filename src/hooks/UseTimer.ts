@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
-export const useTimer = (seconds, onTick, onDone) => {
+export const useTimer = (seconds: number, onTick: (timeLeft: number) => void, onDone: () => void) => {
     const [timerStarted, setTimerStarted] = useState(false);
     const [timeLeft, setTimeLeft] = useState(seconds);
 
@@ -25,7 +25,7 @@ export const useTimer = (seconds, onTick, onDone) => {
 
     useEffect(
         () => {
-            let tickInterval;
+            let tickInterval: NodeJS.Timer | undefined;
 
             if (timerStarted) {
                 tickInterval = setInterval(() => {
