@@ -27,6 +27,10 @@ resource "aws_apigatewayv2_route" "route" {
   target    = "integrations/${aws_apigatewayv2_integration.integration.id}"
 }
 
-output "lambda_route_id" {
-  value = aws_apigatewayv2_route.route.id
+output "integration" {
+  value = aws_apigatewayv2_integration.integration
+}
+
+output "route" {
+  value = aws_apigatewayv2_route.route
 }
