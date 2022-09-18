@@ -4,6 +4,24 @@ resource "aws_apigatewayv2_api" "over_under" {
   route_selection_expression = "$request.body.route"
 }
 
+resource "aws_iam_policy" "manage_connections" {
+  name = "over-under-manage-connections"
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        "Sid" : "OverUnderManageConnections",
+        "Effect" : "Allow",
+        "Action" : [
+          "execute-api:ManageConnections"
+        ],
+        "Resource" :  "${aws_apigatewayv2_api.over_under.execution_arn}/*/*"
+      }
+    ]
+  })
+}
+
 resource "aws_apigatewayv2_deployment" "over_under" {
   api_id = aws_apigatewayv2_api.over_under.id
   description = "OverUnder API Deployment"
@@ -33,5 +51,5 @@ resource "aws_apigatewayv2_stage" "over_under" {
 }
 
 output "socket_endpoint" {
-  value = aws_apigatewayv2_api.over_under.api_endpoint
+  value = "${aws_apigatewayv2_api.over_under.api_endpoint}/${aws_apigatewayv2_stage.over_under.name}"
 } 

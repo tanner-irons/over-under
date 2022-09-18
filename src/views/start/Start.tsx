@@ -1,6 +1,6 @@
 import './Start.scss';
 
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { useWebSocket } from '../../hooks/UseWebSocket';
@@ -86,10 +86,10 @@ const Start = () => {
 
     const startTimer = useTimer(settings.timeLimit, onTick, onDone);
 
-    const startGameTimer = once(() => {
+    const startGameTimer = useCallback(once(() => {
         setStartClicked(true);
         startTimer();
-    })
+    }), []);
 
     return (
         <div className="start">

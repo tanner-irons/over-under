@@ -1,6 +1,6 @@
 import './Join.scss';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { v4 as uuid } from 'uuid';
 import { updateSession } from '../../store/session/SessionActions';
 import { addPlayer } from '../../store/game/GameActions';
@@ -36,7 +36,7 @@ const Join = () => {
 
     const emitAction = useWebSocket(joinRoom);
 
-    const joinGame = once(() => {
+    const joinGame = useCallback(once(() => {
         const newPlayer = {
             id: playerId,
             name,
@@ -47,7 +47,7 @@ const Join = () => {
 
         emitAction(addPlayer(newPlayer));
         setJoined(true);
-    });
+    }), [playerId]);
 
     useEffect(
         () => {
