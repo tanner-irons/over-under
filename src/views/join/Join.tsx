@@ -19,30 +19,26 @@ const Join = () => {
     const { roomid } = useParams<any>();
 
     const { timeLeft, started } = useRootSelector(state => state.game);
+    const { playerId } = useRootSelector(state => state.session);
     const [name, setName] = useState('');
     const [avatar, setAvatar] = useState(avatars[0]);
     const [joined, setJoined] = useState(false);
 
     const joinRoom = socket => {
         const session = {
-            id: roomid
+            id: roomid,
+            playerId: uuid()
         };
 
         dispatch(updateSession(session));
         socket.send(JSON.stringify({ route: 'joinRoom', roomId: roomid }));
-    }
+    };
 
     const emitAction = useWebSocket(joinRoom);
 
     const joinGame = once(() => {
-        const session = {
-            playerId: uuid(),
-        };
-
-        dispatch(updateSession(session));
-
         const newPlayer = {
-            id: session.playerId,
+            id: playerId,
             name,
             avatar,
             score: 0,

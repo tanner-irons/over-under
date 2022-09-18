@@ -28,22 +28,17 @@ const Start = () => {
     const [avatar, setAvatar] = useState(avatars[0]);
     const [startClicked, setStartClicked] = useState(false);
 
-    const roomid = useRef(uuid());
+    const joinRoom = socket => {
+        const session = {
+            id: uuid(),
+            playerId: uuid(),
+        };
+        dispatch(updateSession(session));
 
-    const joinRoom = socket => socket.send(JSON.stringify({ route: 'joinRoom', roomId: roomid.current }))
+        socket.send(JSON.stringify({ route: 'joinRoom', roomId: session.id }));
+    };
 
     const emitAction = useWebSocket(joinRoom);
-
-    useEffect(
-        () => {
-            const session = {
-                id: roomid.current,
-                playerId: uuid(),
-            };
-            dispatch(updateSession(session));
-        },
-        [dispatch]
-    );
 
     useEffect(
         () => {
