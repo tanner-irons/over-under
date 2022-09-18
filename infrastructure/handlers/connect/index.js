@@ -3,11 +3,7 @@ const ddb = new AWS.DynamoDB.DocumentClient();
 
 exports.handler = async (event) => {
     const connectionId = event.requestContext.connectionId;
-    try {
-        await addConnectionId(connectionId);
-    } catch (e) {
-        console.log('DB Error:', e);
-    }
+    await addConnectionId(connectionId);
     return {
         statusCode: 200,
     };

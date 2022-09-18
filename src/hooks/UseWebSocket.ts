@@ -2,7 +2,6 @@ import { useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRootSelector } from './UseRootSelector';
 
-console.log(process.env.REACT_APP_WEBSOCKET_URL);
 const socket = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL ?? "");
 
 export const useWebSocket = (onOpen?) => {
@@ -16,7 +15,6 @@ export const useWebSocket = (onOpen?) => {
             };
 
             socket.onmessage = (event) => {
-                console.log(event);
                 const data = JSON.parse(event.data);
                 const action = JSON.parse(data.data);
                 if (action.type) {

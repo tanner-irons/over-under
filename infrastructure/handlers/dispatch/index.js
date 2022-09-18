@@ -1,11 +1,10 @@
 const AWS = require('aws-sdk');
 const ddb = new AWS.DynamoDB.DocumentClient();
 
-function init(event) {
+function initSend(event) {
     const apigwManagementApi = new AWS.ApiGatewayManagementApi({
         apiVersion: '2018-11-29',
         endpoint: event.requestContext.domainName + '/' + event.requestContext.stage
-
     });
 
     return async(connectionId, data) => {
@@ -33,10 +32,9 @@ function getConnections(roomId) {
 }
 
 exports.handler = async (event) => {
-    const send = init(event);
+    const send = initSend(event);
     const { action, roomId } = JSON.parse(event.body);
     const connections = await getConnections(roomId);
-    console.log(connections.Items);
     const events = connections.Items.map(connection => {
         return send(connection.connectionid, JSON.stringify(action));
     });
