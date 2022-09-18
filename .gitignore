@@ -25,4 +25,4 @@ yarn-error.log*
 
 #terraform
 .terraform
-/infrastructure/handlers/archived
+.zip
