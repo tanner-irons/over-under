@@ -4,18 +4,25 @@ on:
   workflow_dispatch:
 
 jobs:
-  job1:
+  dev_build:
     runs-on: ubuntu-latest
     environment:
       name: dev
     steps:
-    - name: Execute job 1
-      run: echo "Job 1 executed"
+    - name: Build Dev
+      run: echo "Dev Built"
 
-  job2:
+  stage_build:
     runs-on: ubuntu-latest
     environment:
       name: stage
     steps:
-    - name: Execute job 2
-      run: echo "Job 2 executed"
+    - name: Build Staging
+      run: echo "Staging Built"
+
+  stage_deploy:
+    runs-on: ubuntu-latest
+    needs: stage_build
+    steps:
+    - name: Staging Deploy
+      run: echo "Staging Deployed"
