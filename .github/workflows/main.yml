@@ -1,7 +1,9 @@
 name: Manual Sequence Workflow
 
 on: 
-  workflow_dispatch:
+  push:
+    branches:
+      - master
 
 jobs:
   dev_build:
