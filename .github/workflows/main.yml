@@ -1,0 +1,22 @@
+name: Manual Sequence Workflow
+
+on: 
+  workflow_dispatch:
+
+jobs:
+  job1:
+    runs-on: ubuntu-latest
+    environment:
+      name: dev
+    steps:
+    - name: Execute job 1
+      run: echo "Job 1 executed"
+
+  job2:
+    needs: job1
+    runs-on: ubuntu-latest
+    environment:
+      name: stage
+    steps:
+    - name: Execute job 2
+      run: echo "Job 2 executed"
